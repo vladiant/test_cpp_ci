@@ -44,3 +44,34 @@ target_link_libraries(
     PRIVATE
         SampleLib
 )
+
+# Test of Library
+include(CTest)
+
+add_executable(
+    TestSampleLib
+    test/test_simple_calc.cpp
+    test/main.cpp
+)
+
+set_target_properties(
+    TestSampleLib
+    PROPERTIES
+        CXX_STANDARD 17
+        CXX_STANDARD_REQUIRED YES
+        CXX_EXTENSIONS NO
+)
+
+target_include_directories(
+    TestSampleLib
+    PRIVATE
+        .
+)
+
+target_link_libraries(
+    TestSampleLib
+    PRIVATE
+        SampleLib
+)
+
+add_test(NAME TestSampleLib COMMAND TestSampleLib)
