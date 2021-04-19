@@ -6,6 +6,8 @@ project(CppProjectSample LANGUAGES CXX)
 add_library(
     SampleLib
     lib/include/simple_calc.hpp
+    lib/include/basic_warper.hpp
+    lib/src/basic_warper.cpp
 )
 
 set_target_properties(
@@ -51,6 +53,7 @@ include(CTest)
 add_executable(
     TestSampleLib
     test/test_simple_calc.cpp
+    test/test_basic_warper.cpp
     test/main.cpp
 )
 
