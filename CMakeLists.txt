@@ -6,6 +6,7 @@ project(CppProjectSample LANGUAGES CXX)
 add_library(
     SampleLib
     lib/include/simple_calc.hpp
+    lib/include/i_warper.hpp
     lib/include/basic_warper.hpp
     lib/src/basic_warper.cpp
 )
