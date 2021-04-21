@@ -8,7 +8,11 @@ add_library(
     lib/include/simple_calc.hpp
     lib/include/i_warper.hpp
     lib/include/basic_warper.hpp
+    lib/include/checked_warper.hpp
+    lib/include/clamped_warper.hpp
     lib/src/basic_warper.cpp
+    lib/src/checked_warper.cpp
+    lib/src/clamped_warper.cpp
 )
 
 set_target_properties(
@@ -55,6 +59,8 @@ add_executable(
     TestSampleLib
     test/test_simple_calc.cpp
     test/test_basic_warper.cpp
+    test/test_checked_warper.cpp
+    test/test_clamped_warper.cpp
     test/main.cpp
 )
 
