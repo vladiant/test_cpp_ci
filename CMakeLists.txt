@@ -61,6 +61,7 @@ add_executable(
     test/test_basic_warper.cpp
     test/test_checked_warper.cpp
     test/test_clamped_warper.cpp
+    test/test_mocked_warper.cpp
     test/main.cpp
 )
 

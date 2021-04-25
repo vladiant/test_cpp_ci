@@ -21,7 +21,7 @@ TEST_CASE_METHOD(ClampedWarperTest, "ClampedWarperTestAdd_OneToTwo_Three",
 }
 
 TEST_CASE_METHOD(ClampedWarperTest,
-                 "ClampedWarperTestAdd_SignedIntOverflowException",
+                 "ClampedWarperTestAdd_SignedIntOverflow_ClampedToMax",
                  "[clamped-warper]") {
   constexpr auto a = kMaxValue;
   constexpr int16_t b = 1;
@@ -29,7 +29,7 @@ TEST_CASE_METHOD(ClampedWarperTest,
 }
 
 TEST_CASE_METHOD(ClampedWarperTest,
-                 "ClampedWarperTestAdd_SignedIntUnderflowException",
+                 "ClampedWarperTestAdd_SignedIntUnderflow_ClampedToMin",
                  "[clamped-warper]") {
   constexpr auto a = kMinValue;
   constexpr int16_t b = -1;
@@ -42,7 +42,7 @@ TEST_CASE_METHOD(ClampedWarperTest, "ClampedWarperTestSubtract_ThreeByFive_Two",
 }
 
 TEST_CASE_METHOD(ClampedWarperTest,
-                 "ClampedWarperTestSubtract_SignedIntOverflow_Exception",
+                 "ClampedWarperTestSubtract_SignedIntOverflow_ClampedToMax",
                  "[clamped-warper]") {
   constexpr auto a = kMinValue;
   constexpr int16_t b = 1;
@@ -50,7 +50,7 @@ TEST_CASE_METHOD(ClampedWarperTest,
 }
 
 TEST_CASE_METHOD(ClampedWarperTest,
-                 "ClampedWarperTestSubtract_SignedIntUnderflow_Exception",
+                 "ClampedWarperTestSubtract_SignedIntUnderflow_ClampedToMin",
                  "[clamped-warper]") {
   constexpr auto a = kMaxValue;
   constexpr int16_t b = -1;
@@ -64,7 +64,7 @@ TEST_CASE_METHOD(ClampedWarperTest,
 }
 
 TEST_CASE_METHOD(ClampedWarperTest,
-                 "ClampedWarperTestMultiply_SignedIntOverflow_Exception",
+                 "ClampedWarperTestMultiply_SignedIntOverflow_ClampedToMax",
                  "[clamped-warper]") {
   constexpr auto a = kMaxValue;
   constexpr int16_t b = 2;
@@ -72,7 +72,7 @@ TEST_CASE_METHOD(ClampedWarperTest,
 }
 
 TEST_CASE_METHOD(ClampedWarperTest,
-                 "ClampedWarperTestMultiply_SignedIntUnderflow_Exception",
+                 "ClampedWarperTestMultiply_SignedIntUnderflow_ClampedToMin",
                  "[clamped-warper]") {
   constexpr auto a = kMinValue;
   constexpr int16_t b = 2;
