@@ -10,9 +10,11 @@ add_library(
     lib/include/basic_warper.hpp
     lib/include/checked_warper.hpp
     lib/include/clamped_warper.hpp
+    lib/include/operation_strategy.hpp
     lib/src/basic_warper.cpp
     lib/src/checked_warper.cpp
     lib/src/clamped_warper.cpp
+    lib/src/operation_strategy.cpp
 )
 
 set_target_properties(
@@ -62,6 +64,9 @@ add_executable(
     test/test_checked_warper.cpp
     test/test_clamped_warper.cpp
     test/test_mocked_warper.cpp
+    test/test_operation_strategy.cpp
+    test/test_operation_strategy_logic.cpp
+    test/test_operation_strategy_edge.cpp
     test/main.cpp
 )
 

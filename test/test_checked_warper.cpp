@@ -21,7 +21,7 @@ TEST_CASE_METHOD(CheckedWarperTest, "CheckedWarperTestAdd_OneToTwo_Three",
 }
 
 TEST_CASE_METHOD(CheckedWarperTest,
-                 "CheckedWarperTestAdd_SignedIntOverflowException",
+                 "CheckedWarperTestAdd_SignedIntOverflow_Exception",
                  "[checked-warper]") {
   constexpr auto a = kMaxValue;
   constexpr int16_t b = 1;
@@ -29,7 +29,7 @@ TEST_CASE_METHOD(CheckedWarperTest,
 }
 
 TEST_CASE_METHOD(CheckedWarperTest,
-                 "CheckedWarperTestAdd_SignedIntUnderflowException",
+                 "CheckedWarperTestAdd_SignedIntUnderflow_Exception",
                  "[checked-warper]") {
   constexpr auto a = kMinValue;
   constexpr int16_t b = -1;
