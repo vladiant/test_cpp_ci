@@ -35,4 +35,4 @@ jobs:
       shell: bash
       working-directory: ${{github.workspace}}/build      
       # File test/test_simple_calc.cpp is ignored
-      run: cppcheck --project=compile_commands.json --error-exitcode=1 --std=c++17 -i${{github.workspace}}test/test_simple_calc.cpp .
+      run: cppcheck --project=compile_commands.json --error-exitcode=1 --std=c++17 -ihome/runner/work/test_cpp_ci/test_cpp_ci/test/test_simple_calc.cpp .
