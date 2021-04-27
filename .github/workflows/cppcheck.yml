@@ -17,7 +17,21 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y cppcheck
 
+# Basic usage
+#    - name: Run CppCheck    
+#      shell: bash
+#      working-directory: ${{github.workspace}}/lib      
+#      run: cppcheck --error-exitcode=1 --std=c++17 .
+
+    - name: Create Build Environment     
+      run: cmake -E make_directory ${{github.workspace}}/build
+
+    - name: Configure CMake    
+      shell: bash
+      working-directory: ${{github.workspace}}/build      
+      run: cmake $GITHUB_WORKSPACE .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_EXPORT_COMPILE_COMMANDS=ON 
+
     - name: Run CppCheck    
       shell: bash
-      working-directory: ${{github.workspace}}/lib      
-      run: cppcheck --error-exitcode=1 --std=c++17 .
+      working-directory: ${{github.workspace}}/build      
+      run: cppcheck --project=compile_commands.json --error-exitcode=1 --std=c++17 .
