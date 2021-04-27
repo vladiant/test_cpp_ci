@@ -14,24 +14,24 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Create Build Environment     
-      run: cmake -E make_directory ${{github.workspace}}/${BUILD_FOLDER}
+      run: cmake -E make_directory ${{github.workspace}}/${{BUILD_FOLDER}}
 
     - name: Configure CMake    
       shell: bash
-      working-directory: ${{github.workspace}}/${BUILD_FOLDER}   
+      working-directory: ${{github.workspace}}/${{BUILD_FOLDER}}   
       run: cmake $GITHUB_WORKSPACE .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE
 
     - name: Build
-      working-directory: ${{github.workspace}}/${BUILD_FOLDER}
+      working-directory: ${{github.workspace}}/${{BUILD_FOLDER}}
       shell: bash
       run: cmake --build . --config $BUILD_TYPE
 
     - name: Run
-      working-directory: ${{github.workspace}}/${BUILD_FOLDER}
+      working-directory: ${{github.workspace}}/${{BUILD_FOLDER}}
       shell: bash
       run: ./SampleLibApp
 
     - name: Test
-      working-directory: ${{github.workspace}}/${BUILD_FOLDER}
+      working-directory: ${{github.workspace}}/${{BUILD_FOLDER}}
       shell: bash
       run: ctest -C $BUILD_TYPE
