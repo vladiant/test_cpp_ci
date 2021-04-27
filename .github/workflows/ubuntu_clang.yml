@@ -4,7 +4,6 @@ on: [push]
 
 env:
   BUILD_TYPE: Release
-  BUILD_FOLDER: build-clang
 
 jobs:
   build:
@@ -14,24 +13,24 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Create Build Environment     
-      run: cmake -E make_directory ${{github.workspace}}/${{BUILD_FOLDER}}
+      run: cmake -E make_directory ${{github.workspace}}/build-clang
 
     - name: Configure CMake    
       shell: bash
-      working-directory: ${{github.workspace}}/${{BUILD_FOLDER}}      
+      working-directory: ${{github.workspace}}/build-clang      
       run: cmake $GITHUB_WORKSPACE .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/ClangToolchain.cmake
 
     - name: Build
-      working-directory: ${{github.workspace}}/${{BUILD_FOLDER}}
+      working-directory: ${{github.workspace}}/build-clang
       shell: bash
       run: cmake --build . --config $BUILD_TYPE
 
     - name: Run
-      working-directory: ${{github.workspace}}/${{BUILD_FOLDER}}
+      working-directory: ${{github.workspace}}/build-clang
       shell: bash
       run: ./SampleLibApp
 
     - name: Test
-      working-directory: ${{github.workspace}}/${{BUILD_FOLDER}}
+      working-directory: ${{github.workspace}}/build-clang
       shell: bash
       run: ctest -C $BUILD_TYPE
