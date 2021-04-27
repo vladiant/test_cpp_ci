@@ -1,4 +1,4 @@
-name: Ubuntu CppCheck
+name: CppCheck
 
 on: [push]
 
@@ -34,4 +34,5 @@ jobs:
     - name: Run CppCheck    
       shell: bash
       working-directory: ${{github.workspace}}/build      
-      run: cppcheck --project=compile_commands.json --error-exitcode=1 --std=c++17 .
+      # File catch2/catch.hpp is ignored
+      run: cppcheck --project=compile_commands.json --error-exitcode=1 --std=c++17 -i${{github.workspace}}/catch2/catch.hpp .
