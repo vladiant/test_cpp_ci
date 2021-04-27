@@ -28,7 +28,7 @@ jobs:
     - name: Run
       working-directory: ${{github.workspace}}/build
       shell: bash
-      run: ./SampleLibApp
+      run: $BUILD_TYPE\SampleLibApp.exe
 
     - name: Test
       working-directory: ${{github.workspace}}/build
