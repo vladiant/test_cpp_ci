@@ -47,3 +47,24 @@ jobs:
       shell: bash   
       # File test/test_simple_calc.cpp is ignored
       run: cppcheck --project=${{github.workspace}}/compile_commands.json --error-exitcode=1 --std=c++17 --suppress=preprocessorErrorDirective:${{github.workspace}}/catch2/catch.hpp .
+
+  cppcheck:
+    name: Clang Tidy
+    needs: configure
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Download Compile Commands
+      uses: actions/download-artifact@v2
+      with:
+        name: compile_commands
+
+    - name: Install Clang Tidy
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y clang-tidy 
+        sudo apt-get install -y clang-tools
+
+    - name: Run Clang Tidy    
+      shell: bash
+      run: run-clang-tidy -checks='cppcoreguidelines-*,performance-*,readibility-*,modernize-*,misc-*,clang-analyzer-*'
