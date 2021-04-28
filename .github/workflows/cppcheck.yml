@@ -40,7 +40,6 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: compile_commands
-        path: ${{github.workspace}}/build/compile_commands.json
 
     - uses: actions/checkout@v2
 
@@ -50,7 +49,6 @@ jobs:
         sudo apt-get install -y cppcheck
 
     - name: Run CppCheck    
-      shell: bash
-      working-directory: ${{github.workspace}}/build      
+      shell: bash   
       # File test/test_simple_calc.cpp is ignored
       run: cppcheck --project=compile_commands.json --error-exitcode=1 --std=c++17 --suppress=preprocessorErrorDirective:${{github.workspace}}/catch2/catch.hpp .
