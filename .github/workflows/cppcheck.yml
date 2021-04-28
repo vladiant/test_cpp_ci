@@ -40,6 +40,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: compile_commands
+        path: ${{github.workspace}}/build/compile_commands.json
 
     - uses: actions/checkout@v2
 
