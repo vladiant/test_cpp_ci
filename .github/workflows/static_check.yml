@@ -1,0 +1,87 @@
+name: Static Check
+
+on: [push]
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  configure:
+    name: Get Compile Commands
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Create Build Environment     
+      run: cmake -E make_directory ${{github.workspace}}/build
+
+    - name: Configure CMake    
+      shell: bash
+      working-directory: ${{github.workspace}}/build      
+      run: cmake $GITHUB_WORKSPACE .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+
+    - name: Upload Compile Commands
+      uses: actions/upload-artifact@v2
+      with:
+        name: compile_commands
+        path: ${{github.workspace}}/build/compile_commands.json
+  
+    - name: Upload Build Folder
+      uses: actions/upload-artifact@v2
+      with:
+        name: build_folder
+        path: ${{github.workspace}}/build/
+
+  cppcheck:
+    name: CppCheck
+    needs: configure
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Download Compile Commands
+      uses: actions/download-artifact@v2
+      with:
+        name: compile_commands
+
+    - name: Install CppCheck
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cppcheck
+
+    - name: Run CppCheck    
+      shell: bash   
+      # File test/test_simple_calc.cpp is ignored
+      run: cppcheck --project=${{github.workspace}}/compile_commands.json --error-exitcode=1 --std=c++17 --suppress=preprocessorErrorDirective:${{github.workspace}}/catch2/catch.hpp .
+
+  clang-tidy:
+    name: Clang Tidy
+    needs: configure
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+  
+    - name: Download Compile Commands
+      uses: actions/download-artifact@v2
+      with:
+        name: compile_commands
+
+    - name: Create Build Folder     
+      run: cmake -E make_directory ${{github.workspace}}/build
+
+    - name: Download Build Folder
+      uses: actions/download-artifact@v2
+      with:
+        name: build_folder
+
+    - name: Install Clang Tidy
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y clang-tidy 
+        sudo apt-get install -y clang-tools
+
+    - name: Run Clang Tidy    
+      shell: bash
+      working-directory: ${{github.workspace}}/build
+      run: run-clang-tidy -checks='cppcoreguidelines-*,performance-*,readibility-*,modernize-*,misc-*,clang-analyzer-*'
