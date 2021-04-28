@@ -62,9 +62,6 @@ jobs:
     steps:
     - name: Download Compile Commands
     - uses: actions/checkout@v2
-      uses: actions/download-artifact@v2
-      with:
-        name: compile_commands
 
     - name: Create Build Folder     
       run: cmake -E make_directory ${{github.workspace}}/build
@@ -80,7 +77,10 @@ jobs:
         sudo apt-get install -y clang-tidy 
         sudo apt-get install -y clang-tools
 
-    - name: Run Clang Tidy    
+    - name: Run Clang Tidy  
+      uses: actions/download-artifact@v2
+      with:
+        name: compile_commands  
       shell: bash
       working-directory: ${{github.workspace}}/build 
       run: run-clang-tidy -checks='cppcoreguidelines-*,performance-*,readibility-*,modernize-*,misc-*,clang-analyzer-*'
