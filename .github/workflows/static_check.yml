@@ -84,5 +84,4 @@ jobs:
     - name: Run Clang Tidy    
       shell: bash
       working-directory: ${{github.workspace}}/build
-      run: ls
       run: run-clang-tidy -checks='cppcoreguidelines-*,performance-*,readibility-*,modernize-*,misc-*,clang-analyzer-*'
