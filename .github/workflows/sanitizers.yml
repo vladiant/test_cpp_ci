@@ -3,8 +3,8 @@ name: Clang Sanitizers
 on: [push]
 
 jobs:
-  build-clang:
-    name: Clang Address Sanitizer
+  build-address-sanitizer:
+    name: Address Sanitizer
     runs-on: ubuntu-latest
 
     steps:
@@ -33,5 +33,104 @@ jobs:
 
     - name: Test
       working-directory: ${{github.workspace}}/build-clang-asan
+      shell: bash
+      run: ctest
+
+  build-memory-sanitizer:
+    name: Memory Sanitizer
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Create Build Environment     
+      run: cmake -E make_directory ${{github.workspace}}/build-clang-msan
+
+    - name: Configure CMake    
+      shell: bash
+      working-directory: ${{github.workspace}}/build-clang-msan   
+      run: |
+          cmake $GITHUB_WORKSPACE .. \
+                -DCMAKE_C_COMPILER=/usr/bin/clang \
+                -DCMAKE_CXX_COMPILER=/usr/bin/clang++ \
+                -DCMAKE_CXX_FLAGS="-O1 -g -fsanitize=memory -fno-omit-frame-pointer"
+    - name: Build
+      working-directory: ${{github.workspace}}/build-clang-msan
+      shell: bash
+      run: cmake --build . 
+
+    - name: Run
+      working-directory: ${{github.workspace}}/build-clang-msan
+      shell: bash
+      run: ./SampleLibApp
+
+    - name: Test
+      working-directory: ${{github.workspace}}/build-clang-msan
+      shell: bash
+      run: ctest
+
+  build-thread-sanitizer:
+    name: Thread Sanitizer
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Create Build Environment     
+      run: cmake -E make_directory ${{github.workspace}}/build-clang-tsan
+
+    - name: Configure CMake    
+      shell: bash
+      working-directory: ${{github.workspace}}/build-clang-tsan   
+      run: |
+          cmake $GITHUB_WORKSPACE .. \
+                -DCMAKE_C_COMPILER=/usr/bin/clang \
+                -DCMAKE_CXX_COMPILER=/usr/bin/clang++ \
+                -DCMAKE_CXX_FLAGS="-O1 -g -fsanitize=thread"
+    - name: Build
+      working-directory: ${{github.workspace}}/build-clang-tsan
+      shell: bash
+      run: cmake --build . 
+
+    - name: Run
+      working-directory: ${{github.workspace}}/build-clang-tsan
+      shell: bash
+      run: ./SampleLibApp
+
+    - name: Test
+      working-directory: ${{github.workspace}}/build-clang-tsan
+      shell: bash
+      run: ctest
+
+  build-undefined-behaviour-sanitizer:
+    name: Undefined Behaviour Sanitizer
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Create Build Environment     
+      run: cmake -E make_directory ${{github.workspace}}/build-clang-ubsan
+
+    - name: Configure CMake    
+      shell: bash
+      working-directory: ${{github.workspace}}/build-clang-ubsan   
+      run: |
+          cmake $GITHUB_WORKSPACE .. \
+                -DCMAKE_C_COMPILER=/usr/bin/clang \
+                -DCMAKE_CXX_COMPILER=/usr/bin/clang++ \
+                -DCMAKE_CXX_FLAGS="-fsanitize=undefined"
+    - name: Build
+      working-directory: ${{github.workspace}}/build-clang-ubsan
+      shell: bash
+      run: cmake --build . 
+
+    - name: Run
+      working-directory: ${{github.workspace}}/build-clang-ubsan
+      shell: bash
+      run: ./SampleLibApp
+
+    - name: Test
+      working-directory: ${{github.workspace}}/build-clang-ubsan
       shell: bash
       run: ctest
