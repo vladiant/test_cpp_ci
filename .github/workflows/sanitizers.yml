@@ -2,6 +2,7 @@ name: Clang Sanitizers
 
 on: [push]
 
+jobs:
   build-clang:
     name: Clang Address Sanitizer
     runs-on: ubuntu-latest
