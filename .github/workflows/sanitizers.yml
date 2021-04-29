@@ -1,0 +1,36 @@
+name: Ubuntu CMake
+
+on: [push]
+
+  build-clang:
+    name: Clang Address Sanitizer
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Create Build Environment     
+      run: cmake -E make_directory ${{github.workspace}}/build-clang-asan
+
+    - name: Configure CMake    
+      shell: bash
+      working-directory: ${{github.workspace}}/build-clang-asan   
+      run: |
+          cmake $GITHUB_WORKSPACE .. \
+                -DCMAKE_C_COMPILER=/usr/bin/clang \
+                -DCMAKE_CXX_COMPILER=/usr/bin/clang++ \
+                -DCMAKE_CXX_FLAGS="-O1 -g -fsanitize=address -fno-omit-frame-pointer"
+    - name: Build
+      working-directory: ${{github.workspace}}/build-clang-asan
+      shell: bash
+      run: cmake --build . 
+
+    - name: Run
+      working-directory: ${{github.workspace}}/build-clang-asan
+      shell: bash
+      run: ./SampleLibApp
+
+    - name: Test
+      working-directory: ${{github.workspace}}/build-clang-asan
+      shell: bash
+      run: ctest
