@@ -34,7 +34,7 @@ jobs:
     - name: Test
       working-directory: ${{github.workspace}}/build-clang-asan
       shell: bash
-      run: ctest
+      run: ctest -VV --progress
 
   build-memory-sanitizer:
     name: Memory Sanitizer
@@ -67,7 +67,7 @@ jobs:
     - name: Test
       working-directory: ${{github.workspace}}/build-clang-msan
       shell: bash
-      run: ctest
+      run: ctest -VV --progress
 
   build-thread-sanitizer:
     name: Thread Sanitizer
@@ -100,7 +100,7 @@ jobs:
     - name: Test
       working-directory: ${{github.workspace}}/build-clang-tsan
       shell: bash
-      run: ctest
+      run: ctest -VV --progress
 
   build-undefined-behaviour-sanitizer:
     name: Undefined Behaviour Sanitizer
@@ -133,4 +133,4 @@ jobs:
     - name: Test
       working-directory: ${{github.workspace}}/build-clang-ubsan
       shell: bash
-      run: ctest
+      run: ctest -VV --progress
