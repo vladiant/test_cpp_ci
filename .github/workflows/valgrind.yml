@@ -32,7 +32,7 @@ jobs:
         name: test_executable
         path: ${{github.workspace}}/build/TestSampleLib
 
-  cppcheck:
+  memcheck:
     name: Valgrind Memcheck
     needs: build
     runs-on: ubuntu-latest
@@ -48,7 +48,7 @@ jobs:
       with:
         name: test_executable
         
-    - name: Run Valgrind Memcheck   
+    - name: Set download executable   
       shell: bash
       run: chmod +x ${{github.workspace}}/TestSampleLib
 
