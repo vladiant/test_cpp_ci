@@ -12,11 +12,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    
-    - name: Install Valgrind
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y valgrind
 
     - name: Create Build Environment     
       run: cmake -E make_directory ${{github.workspace}}/build
@@ -43,6 +38,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Install Valgrind
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y valgrind
+        
     - name: Download Test Executable
       uses: actions/download-artifact@v2
       with:
