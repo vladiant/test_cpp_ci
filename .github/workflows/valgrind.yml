@@ -62,7 +62,7 @@ jobs:
         name: valgrind_memcheck
         path: ${{github.workspace}}/valgrind-memcheck.txt
         
-   helgrind:
+  helgrind:
     name: Valgrind Thread analyzer
     needs: build
     runs-on: ubuntu-latest
