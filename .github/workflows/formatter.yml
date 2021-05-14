@@ -19,7 +19,7 @@ jobs:
       - name: Execute formatter
         run: |
             export CPP_SRC_FILES=$(find ./lib -name "*.*" | grep -E "(\.cc$|\.cpp$|\.h$|\.hpp$)")
-						export CPP_SRC_FILES="$CPP_SRC_FILES $(find ./app -name "*.*" | grep -E "(\.cc$|\.cpp$|\.h$|\.hpp$)")"
+            export CPP_SRC_FILES="$CPP_SRC_FILES $(find ./app -name "*.*" | grep -E "(\.cc$|\.cpp$|\.h$|\.hpp$)")"
             if [ -n "$CPP_SRC_FILES" ]; then clang-format --style=Google -i $CPP_SRC_FILES; fi;
 
       - name: Commit changes
