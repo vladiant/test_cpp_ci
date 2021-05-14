@@ -19,7 +19,7 @@ jobs:
       - name: Execute formatter
         run: |
             export CPP_SRC_FILES=$(find -name "*.*" | grep -E "(\.cc$|\.cpp$|\.h$|\.hpp$)")
-						if [ -n "$CPP_SRC_FILES" ]; then clang-format --style=Google -i $CPP_SRC_FILES; fi;
+            if [ -n "$CPP_SRC_FILES" ]; then clang-format --style=Google -i $CPP_SRC_FILES; fi;
 
       - name: Commit changes
         uses: Endbug/add-and-commit@v7
