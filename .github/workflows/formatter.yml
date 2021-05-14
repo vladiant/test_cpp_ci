@@ -1,0 +1,29 @@
+name: Auto Format
+
+on: [push]
+
+jobs:
+  run:
+    name: Format with clang-format
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+            sudo apt-get update
+            sudo apt-get install -y clang-format
+
+      - name: execute python script
+        run: |
+				    export CPP_SRC_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E "(\.cc$|\.cpp$|\.h$|\.hpp$)")
+            clang-format --style=Google -i $CPP_SRC_FILES
+
+      - name: Commit changes
+        uses: Endbug/add-and-commit@v7
+        with:
+            default_author: github_actions
+            message: 'Auto Format'
+						add: '*.*'
