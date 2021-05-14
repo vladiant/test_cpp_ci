@@ -16,7 +16,7 @@ jobs:
             sudo apt-get update
             sudo apt-get install -y clang-format
 
-      - name: execute python script
+      - name: Execute formatter
         run: |
             export CPP_SRC_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E "(\.cc$|\.cpp$|\.h$|\.hpp$)")
             clang-format --style=Google -i $CPP_SRC_FILES
