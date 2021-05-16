@@ -1,0 +1,94 @@
+name: Ubuntu Valgrind
+
+on: [push]
+
+env:
+  BUILD_TYPE: Debug
+
+jobs:
+  build:
+    name: Build Executables
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Create Build Environment     
+      run: cmake -E make_directory ${{github.workspace}}/build
+
+    - name: Configure CMake    
+      shell: bash
+      working-directory: ${{github.workspace}}/build   
+      run: cmake $GITHUB_WORKSPACE .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+
+    - name: Build
+      working-directory: ${{github.workspace}}/build
+      shell: bash
+      run: cmake --build . --config $BUILD_TYPE
+
+    - name: Upload Tests Executable
+      uses: actions/upload-artifact@v2
+      with:
+        name: test_executable
+        path: ${{github.workspace}}/build/TestSampleLib
+
+  memcheck:
+    name: Valgrind Memcheck
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Install Valgrind
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y valgrind
+        
+    - name: Download Test Executable
+      uses: actions/download-artifact@v2
+      with:
+        name: test_executable
+        
+    - name: Set download executable   
+      shell: bash
+      run: chmod +x ${{github.workspace}}/TestSampleLib
+
+    - name: Run Valgrind Memcheck   
+      shell: bash   
+      run: valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --log-file=${{github.workspace}}/valgrind-memcheck.txt ${{github.workspace}}/TestSampleLib
+      
+    - name: Upload Valgrind Memcheck Result
+      uses: actions/upload-artifact@v2
+      with:
+        name: valgrind_memcheck
+        path: ${{github.workspace}}/valgrind-memcheck.txt
+        
+  helgrind:
+    name: Valgrind Thread analyzer
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Install Valgrind
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y valgrind
+        
+    - name: Download Test Executable
+      uses: actions/download-artifact@v2
+      with:
+        name: test_executable
+        
+    - name: Set download executable   
+      shell: bash
+      run: chmod +x ${{github.workspace}}/TestSampleLib
+
+    - name: Run Valgrind Helgrind   
+      shell: bash   
+      run: valgrind --tool=helgrind --log-file=${{github.workspace}}/valgrind-helgrind.txt ${{github.workspace}}/TestSampleLib
+      
+    - name: Upload Valgrind Helgrind Result
+      uses: actions/upload-artifact@v2
+      with:
+        name: valgrind_helgrind
+        path: ${{github.workspace}}/valgrind-helgrind.txt
+
