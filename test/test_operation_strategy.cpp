@@ -1,5 +1,5 @@
 #include <basic_warper.hpp>
-#include <catch2/catch.hpp>
+#include <doctest/doctest.h>
 #include <checked_warper.hpp>
 #include <clamped_warper.hpp>
 #include <cstdint>
@@ -7,16 +7,10 @@
 
 namespace vva {
 
-TEST_CASE("GeneralOperationStrategy", "[operation-strategy-logic]") {
-  BasicOperationWarper basic_warper;
-  CheckedOperationWarper checked_warper;
-  ClampedOperationWarper clamped_warper;
+TEST_CASE_TEMPLATE("GeneralOperationStrategy [operation-strategy-logic]", T, BasicOperationWarper, CheckedOperationWarper, ClampedOperationWarper) {
+  T i = T();
 
-  IOperationWarper* i =
-      GENERATE_REF(&basic_warper, &checked_warper, &clamped_warper);
-
-  REQUIRE(nullptr != i);
-  OperationStrategy test_strategy(*i);
+  OperationStrategy test_strategy(i);
 
   REQUIRE(test_strategy(6, 2) == 4);
 }

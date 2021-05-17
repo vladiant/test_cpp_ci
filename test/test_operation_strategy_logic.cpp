@@ -1,4 +1,4 @@
-#include <catch2/catch.hpp>
+#include <doctest/doctest.h>
 #include <cstdint>
 #include <fakeit/fakeit.hpp>
 #include <i_warper.hpp>
@@ -17,9 +17,8 @@ class MockedOperationStrategyTest {
   fakeit::Mock<IOperationWarper> mockWarper;
 };
 
-TEST_CASE_METHOD(MockedOperationStrategyTest,
-                 "MockOperationStrategy_Arg_Result",
-                 "[mock-operation-strategy]") {
+TEST_CASE_FIXTURE (MockedOperationStrategyTest,
+                 "MockOperationStrategy_Arg_Result [mock-operation-strategy]") {
   fakeit::Mock<IOperationWarper> mockWarper;
 
   constexpr int16_t first_arg = 6;
