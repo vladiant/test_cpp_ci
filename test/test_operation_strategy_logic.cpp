@@ -1,4 +1,5 @@
-#include <catch2/catch.hpp>
+#include <gtest/gtest.h>
+
 #include <cstdint>
 #include <fakeit/fakeit.hpp>
 #include <i_warper.hpp>
@@ -12,14 +13,12 @@ using fakeit::When;
 
 namespace vva {
 
-class MockedOperationStrategyTest {
+class MockedOperationStrategyTest : public testing::Test {
  protected:
   fakeit::Mock<IOperationWarper> mockWarper;
 };
 
-TEST_CASE_METHOD(MockedOperationStrategyTest,
-                 "MockOperationStrategy_Arg_Result",
-                 "[mock-operation-strategy]") {
+TEST_F(MockedOperationStrategyTest, MockOperationStrategy_Arg_Result) {
   fakeit::Mock<IOperationWarper> mockWarper;
 
   constexpr int16_t first_arg = 6;
@@ -42,7 +41,7 @@ TEST_CASE_METHOD(MockedOperationStrategyTest,
 
   OperationStrategy test_strategy(mockWarper.get());
 
-  REQUIRE(test_strategy(first_arg, second_arg) == operation_result);
+  EXPECT_EQ(test_strategy(first_arg, second_arg), operation_result);
 }
 
 }  // namespace vva
