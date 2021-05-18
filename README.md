@@ -3,10 +3,10 @@ Test C++ CI project
 
 ## Test frameworks
 
-### Catch2
-* https://github.com/catchorg/Catch2
-* commit de6fe184a9ac1a06895cdd1c9b437f0a0bdf14ad
-* v2.13.4
+### googletest
+* https://github.com/google/googletest
+* commit 703bd9caab50b139428cea1aaff9974ebee5742e
+* 1.10
 
 ### FakeIt
 * https://github.com/eranpeer/FakeIt
