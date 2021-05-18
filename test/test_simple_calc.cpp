@@ -1,11 +1,10 @@
 #include <doctest/doctest.h>
+
 #include <cstdint>
 #include <simple_calc.hpp>
 
 namespace vva {
-TEST_CASE("TestAdd_OneToTwo_Three [simple-calc]") {
-  REQUIRE(add(1, 2) == 3);
-}
+TEST_CASE("TestAdd_OneToTwo_Three [simple-calc]") { REQUIRE(add(1, 2) == 3); }
 
 TEST_CASE("TestAdd_UnsignedIntOverflow [simple-calc]") {
   constexpr uint8_t a = 255;

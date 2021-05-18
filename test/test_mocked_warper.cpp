@@ -1,4 +1,5 @@
 #include <doctest/doctest.h>
+
 #include <cstdint>
 #include <fakeit/fakeit.hpp>
 #include <i_warper.hpp>
@@ -25,21 +26,24 @@ class MockedWarperTest {
   fakeit::Mock<IOperationWarper> mockWarper;
 };
 
- TEST_CASE_FIXTURE(MockedWarperTest, "MockedWarperTestAdd_OneToTwo_Three [mock-warper]") {
+TEST_CASE_FIXTURE(MockedWarperTest,
+                  "MockedWarperTestAdd_OneToTwo_Three [mock-warper]") {
   When(Method(mockWarper, addition).Using(1, 2)).Return(3);
 
   REQUIRE(CallMock(mockWarper.get(), &IOperationWarper::addition, 1, 2) == 3);
 }
 
 // This test intentionally produces wrong result
- TEST_CASE_FIXTURE(MockedWarperTest, "MockedWarperTestAdd_OneToTwo_Four [mock-warper]") {
+TEST_CASE_FIXTURE(MockedWarperTest,
+                  "MockedWarperTestAdd_OneToTwo_Four [mock-warper]") {
   When(Method(mockWarper, addition)).Return(4);
 
   REQUIRE(CallMock(mockWarper.get(), &IOperationWarper::addition, 1, 2) == 4);
 }
 
- TEST_CASE_FIXTURE(MockedWarperTest,
-                 "MockedWarperTestAdd_SignedIntOverflowException [mock-warper]") {
+TEST_CASE_FIXTURE(
+    MockedWarperTest,
+    "MockedWarperTestAdd_SignedIntOverflowException [mock-warper]") {
   constexpr auto a = kMaxValue;
   constexpr int16_t b = 1;
 
@@ -51,8 +55,9 @@ class MockedWarperTest {
       std::overflow_error);
 }
 
- TEST_CASE_FIXTURE(MockedWarperTest,
-                 "MockedWarperTestAdd_SignedIntOverflowClamped [mock-warper]") {
+TEST_CASE_FIXTURE(
+    MockedWarperTest,
+    "MockedWarperTestAdd_SignedIntOverflowClamped [mock-warper]") {
   constexpr auto a = kMaxValue;
   constexpr int16_t b = 1;
 
