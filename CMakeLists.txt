@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.10)
 
 project(CppProjectSample LANGUAGES CXX)
 
+add_subdirectory(googletest)
+
 # Library
 add_library(
     SampleLib
@@ -63,10 +65,10 @@ add_executable(
     test/test_basic_warper.cpp
     test/test_checked_warper.cpp
     test/test_clamped_warper.cpp
-    test/test_mocked_warper.cpp
+    # test/test_mocked_warper.cpp
     test/test_operation_strategy.cpp
-    test/test_operation_strategy_logic.cpp
-    test/test_operation_strategy_edge.cpp
+    # test/test_operation_strategy_logic.cpp
+    # test/test_operation_strategy_edge.cpp
     test/main.cpp
 )
 
@@ -82,12 +84,14 @@ target_include_directories(
     TestSampleLib
     PRIVATE
         .
+        googletest/googletest/include
 )
 
 target_link_libraries(
     TestSampleLib
     PRIVATE
         SampleLib
+        gtest_main
 )
 
 add_test(NAME TestSampleLib COMMAND TestSampleLib)

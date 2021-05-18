@@ -1,36 +1,31 @@
-#include <catch2/catch.hpp>
+#include <gtest/gtest.h>
+
 #include <cstdint>
 #include <simple_calc.hpp>
 
 namespace vva {
-TEST_CASE("TestAdd_OneToTwo_Three", "[simple-calc]") {
-  REQUIRE(add(1, 2) == 3);
-}
+TEST(SimpleCalc, TestAdd_OneToTwo_Three) { EXPECT_EQ(add(1, 2), 3); }
 
-TEST_CASE("TestAdd_UnsignedIntOverflow", "[simple-calc]") {
+TEST(SimpleCalc, TestAdd_UnsignedIntOverflow) {
   constexpr uint8_t a = 255;
   constexpr uint8_t b = 1;
   // Note: 8 bit integer will be printed as char
-  REQUIRE(add(a, b) == 0);
+  EXPECT_EQ(add(a, b), 0);
 }
 
-TEST_CASE("TestAdd_SignedIntOverflow", "[simple-calc]") {
+TEST(SimpleCalc, TestAdd_SignedIntOverflow) {
   constexpr int8_t a = 127;
   constexpr int8_t b = 1;
   // Note: 8 bit integer will be printed as char
-  REQUIRE(int(add(a, b)) == -128);
+  EXPECT_EQ(int(add(a, b)), -128);
 }
 
-TEST_CASE("TestSubtract_ThreeByFive_Two", "[simple-calc]") {
-  REQUIRE(subtract(5, 3) == 2);
+TEST(SimpleCalc, TestSubtract_ThreeByFive_Two) { EXPECT_EQ(subtract(5, 3), 2); }
+
+TEST(SimpleCalc, TestMultiply_FiveBySix_Thirty) {
+  EXPECT_EQ(multiply(5, 6), 30);
 }
 
-TEST_CASE("TestMultiply_FiveBySix_Thirty", "[simple-calc]") {
-  REQUIRE(multiply(5, 6) == 30);
-}
-
-TEST_CASE("TestDivide_TenByTwo_Five", "[simple-calc]") {
-  REQUIRE(divide(10, 2) == 5);
-}
+TEST(SimpleCalc, TestDivide_TenByTwo_Five) { EXPECT_EQ(divide(10, 2), 5); }
 
 }  // namespace vva
