@@ -33,7 +33,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: build_folder
-        path: ${{github.workspace}}/build/
+        path: ${{github.workspace}}/build
 
   cppcheck:
     name: CppCheck
@@ -78,11 +78,6 @@ jobs:
       with:
         name: build_folder
         path: ${{github.workspace}}
-
-    # Debug - to be removed
-    - name: Display structure of downloaded files
-      run: ls -R
-      working-directory: ${{github.workspace}}/build
 
     - name: Install Clang Tidy
       run: |
