@@ -1,26 +1,36 @@
+#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 #include <cstdint>
-#include <fakeit/fakeit.hpp>
 #include <i_warper.hpp>
 #include <limits>
 #include <operation_strategy.hpp>
 
 namespace {
-using fakeit::Mock;
-using fakeit::When;
+using ::testing::Return;
 }  // namespace
 
 namespace vva {
 
+class MockWarper : public IOperationWarper {
+ public:
+  virtual ~MockWarper() {}
+
+  MOCK_METHOD2(addition, int16_t(const int16_t&, const int16_t&));
+
+  MOCK_METHOD2(subtraction, int16_t(const int16_t&, const int16_t&));
+
+  MOCK_METHOD2(multiplication, int16_t(const int16_t&, const int16_t&));
+
+  MOCK_METHOD2(division, int16_t(const int16_t&, const int16_t&));
+};
+
 class MockedOperationStrategyTest : public testing::Test {
  protected:
-  fakeit::Mock<IOperationWarper> mockWarper;
+  MockWarper mockWarper;
 };
 
 TEST_F(MockedOperationStrategyTest, MockOperationStrategy_Arg_Result) {
-  fakeit::Mock<IOperationWarper> mockWarper;
-
   constexpr int16_t first_arg = 6;
   constexpr int16_t second_arg = 2;
   constexpr int16_t operation_result = 4;
@@ -29,17 +39,20 @@ TEST_F(MockedOperationStrategyTest, MockOperationStrategy_Arg_Result) {
   constexpr int16_t second_stage_result = 16;
   constexpr int16_t third_stage_result = 4;
 
-  When(Method(mockWarper, addition).Using(first_arg, second_arg))
-      .Return(first_stage_result);
-  When(Method(mockWarper, multiplication).Using(first_stage_result, 2))
-      .Return(second_stage_result);
-  When(Method(mockWarper, subtraction).Using(first_arg, second_arg))
-      .Return(third_stage_result);
-  When(Method(mockWarper, division)
-           .Using(second_stage_result, third_stage_result))
-      .Return(operation_result);
+  EXPECT_CALL(mockWarper, addition(first_arg, second_arg))
+      .Times(1)
+      .WillOnce(Return(first_stage_result));
+  EXPECT_CALL(mockWarper, multiplication(first_stage_result, 2))
+      .Times(1)
+      .WillOnce(Return(second_stage_result));
+  EXPECT_CALL(mockWarper, subtraction(first_arg, second_arg))
+      .Times(1)
+      .WillOnce(Return(third_stage_result));
+  EXPECT_CALL(mockWarper, division(second_stage_result, third_stage_result))
+      .Times(1)
+      .WillOnce(Return(operation_result));
 
-  OperationStrategy test_strategy(mockWarper.get());
+  OperationStrategy test_strategy(mockWarper);
 
   EXPECT_EQ(test_strategy(first_arg, second_arg), operation_result);
 }
