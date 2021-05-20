@@ -65,9 +65,9 @@ add_executable(
     test/test_basic_warper.cpp
     test/test_checked_warper.cpp
     test/test_clamped_warper.cpp
-    test/test_mocked_warper.cpp
+#    test/test_mocked_warper.cpp
     test/test_operation_strategy.cpp
-    test/test_operation_strategy_logic.cpp
+#    test/test_operation_strategy_logic.cpp
     test/test_operation_strategy_edge.cpp
     test/main.cpp
 )
