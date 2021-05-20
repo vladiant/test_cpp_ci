@@ -7,7 +7,7 @@ env:
 
 jobs:
   configure:
-    name: Get Compile Commands
+    name: Compile Commands and clang-tidy
     runs-on: ubuntu-latest
 
     steps:
