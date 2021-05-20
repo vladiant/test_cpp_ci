@@ -29,7 +29,7 @@ jobs:
         name: compile_commands
         path: ${{github.workspace}}/build/compile_commands.json
   
-   - name: Install Clang Tidy
+    - name: Install Clang Tidy
       run: |
         sudo apt-get update
         sudo apt-get install -y clang-tidy 
