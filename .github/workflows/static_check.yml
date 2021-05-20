@@ -77,7 +77,9 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: build_folder
+        path: ${{github.workspace}}
 
+    # Debug - to be removed
     - name: Display structure of downloaded files
       run: ls -R
       working-directory: ${{github.workspace}}/build
