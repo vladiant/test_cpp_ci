@@ -52,9 +52,8 @@ jobs:
         sudo apt-get install -y cppcheck
 
     - name: Run CppCheck    
-      shell: bash   
-      # File test/test_simple_calc.cpp is ignored
-      run: cppcheck --project=${{github.workspace}}/compile_commands.json --error-exitcode=1 --std=c++17 --suppress=preprocessorErrorDirective:${{github.workspace}}/catch2/catch.hpp .
+      shell: bash
+      run: cppcheck --project=${{github.workspace}}/compile_commands.json --error-exitcode=1 --std=c++17 .
 
   clang-tidy:
     name: Clang Tidy
@@ -78,6 +77,10 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: build_folder
+
+    - name: Display structure of downloaded files
+      run: ls -R
+      working-directory: ${{github.workspace}}/build
 
     - name: Install Clang Tidy
       run: |
