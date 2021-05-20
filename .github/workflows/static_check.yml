@@ -29,11 +29,16 @@ jobs:
         name: compile_commands
         path: ${{github.workspace}}/build/compile_commands.json
   
-    - name: Upload Build Folder
-      uses: actions/upload-artifact@v2
-      with:
-        name: build_folder
-        path: ${{github.workspace}}/build
+   - name: Install Clang Tidy
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y clang-tidy 
+        sudo apt-get install -y clang-tools
+
+    - name: Run Clang Tidy    
+      shell: bash
+      working-directory: ${{github.workspace}}/build
+      run: run-clang-tidy -checks='cppcoreguidelines-*,performance-*,readibility-*,modernize-*,misc-*,clang-analyzer-*'
 
   cppcheck:
     name: CppCheck
@@ -55,37 +60,3 @@ jobs:
       shell: bash
       run: cppcheck --project=${{github.workspace}}/compile_commands.json --error-exitcode=1 --std=c++17 .
 
-  clang-tidy:
-    name: Clang Tidy
-    needs: configure
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        submodules: true
-  
-    - name: Download Compile Commands
-      uses: actions/download-artifact@v2
-      with:
-        name: compile_commands
-
-    - name: Create Build Folder     
-      run: cmake -E make_directory ${{github.workspace}}/build
-
-    - name: Download Build Folder
-      uses: actions/download-artifact@v2
-      with:
-        name: build_folder
-        path: ${{github.workspace}}
-
-    - name: Install Clang Tidy
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y clang-tidy 
-        sudo apt-get install -y clang-tools
-
-    - name: Run Clang Tidy    
-      shell: bash
-      working-directory: ${{github.workspace}}/build
-      run: run-clang-tidy -checks='cppcoreguidelines-*,performance-*,readibility-*,modernize-*,misc-*,clang-analyzer-*'
