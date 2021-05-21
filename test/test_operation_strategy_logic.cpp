@@ -20,7 +20,6 @@ class MockedOperationStrategyTest {
 TEST_CASE_METHOD(MockedOperationStrategyTest,
                  "MockOperationStrategy_Arg_Result",
                  "[mock-operation-strategy]") {
-  fakeit::Mock<IOperationWarper> mockWarper;
 
   constexpr int16_t first_arg = 6;
   constexpr int16_t second_arg = 2;
