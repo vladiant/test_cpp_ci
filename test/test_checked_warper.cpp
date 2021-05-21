@@ -4,13 +4,9 @@
 #include <limits>
 #include <stdexcept>
 
-#ifndef NOMINMAX
-# define NOMINMAX
-#endif
-
 namespace {
-constexpr auto kMaxValue = std::numeric_limits<int16_t>::max();
-constexpr auto kMinValue = std::numeric_limits<int16_t>::min();
+constexpr auto kMaxValue = (std::numeric_limits<int16_t>::max)();
+constexpr auto kMinValue = (std::numeric_limits<int16_t>::min)();
 }  // namespace
 
 namespace vva {
