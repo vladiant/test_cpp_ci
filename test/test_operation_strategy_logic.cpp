@@ -19,8 +19,6 @@ class MockedOperationStrategyTest : public testing::Test {
 };
 
 TEST_F(MockedOperationStrategyTest, MockOperationStrategy_Arg_Result) {
-  fakeit::Mock<IOperationWarper> mockWarper;
-
   constexpr int16_t first_arg = 6;
   constexpr int16_t second_arg = 2;
   constexpr int16_t operation_result = 4;
