@@ -1,3 +1,6 @@
-#define CATCH_CONFIG_MAIN
+#include <cstdlib>
 
-#include <catch2/catch.hpp>
+int main(int argc, char* argv[]){
+
+    return EXIT_SUCCESS;
+}
