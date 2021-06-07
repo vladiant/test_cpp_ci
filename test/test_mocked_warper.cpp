@@ -19,6 +19,46 @@ int16_t CallMock(vva::IOperationWarper& warper, Func func, Args... args) {
 
 }  // namespace
 
+namespace Catch
+{
+namespace Matchers
+{
+class ExceptionWatcher
+    : public MatcherBase<std::exception>
+{
+public:
+    ExceptionWatcher(std::string const & expected_message)
+        : m_expected_message(expected_message)
+    {
+    }
+
+    bool match(std::exception const & e) const override
+    {
+        return e.what() == m_expected_message;
+    }
+
+    std::string describe() const override
+    {
+        return "compare the exception what() message with \""
+             + m_expected_message
+             + "\".";
+    }
+
+private:
+    std::string  m_expected_message;
+};
+
+
+inline ExceptionWatcher ExceptionMessage(std::string const & expeted_message)
+{
+    return ExceptionWatcher(expeted_message);
+}
+
+}
+// Matchers namespace
+}
+// Catch namespace
+
 namespace vva {
 class MockedWarperTest {
  protected:
@@ -46,12 +86,16 @@ TEST_CASE_METHOD(MockedWarperTest,
   constexpr auto a = kMaxValue;
   constexpr int16_t b = 1;
 
-  When(Method(mockWarper, addition).Using(a, b))
-      .Throw(std::overflow_error("REQUIRE_THROWS_MATCHES"));
+  // Message intentionally is different than the actual one
+  const auto exception_message = "Overflow Error";
 
-  REQUIRE_THROWS_AS(
-      CallMock(mockWarper.get(), &IOperationWarper::addition, a, b),
-      std::overflow_error);
+  When(Method(mockWarper, addition).Using(a, b))
+      .Throw(std::overflow_error(exception_message));
+
+
+  REQUIRE_THROWS_MATCHES(CallMock(mockWarper.get(), &IOperationWarper::addition, a, b),
+  std::overflow_error, Catch::Matchers::ExceptionMessage(exception_message)
+  );
 }
 
 TEST_CASE_METHOD(MockedWarperTest,
