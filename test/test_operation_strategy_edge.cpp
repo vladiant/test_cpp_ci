@@ -17,8 +17,8 @@ namespace vva {
 
 class StrategyClampedTest {
  protected:
-  ClampedOperationWarper warper;
-  OperationStrategy test_strategy{warper};
+  ClampedOperationWarper warper_;
+  OperationStrategy test_strategy_{warper_};
 };
 
 TEST_CASE_FIXTURE(
@@ -26,7 +26,7 @@ TEST_CASE_FIXTURE(
     "StrategyClampedTest_FirstStageOverflow_Exception [operation-strategy]") {
   constexpr auto a = kMaxValue;
   constexpr int16_t b = 1;
-  REQUIRE(test_strategy(a, b) == 1);
+  REQUIRE(test_strategy_(a, b) == 1);
 }
 
 TEST_CASE_FIXTURE(
@@ -34,7 +34,7 @@ TEST_CASE_FIXTURE(
     "StrategyClampedTest_FirstStageUnderflow_Exception [operation-strategy]") {
   constexpr auto a = kMinValue;
   constexpr int16_t b = -1;
-  REQUIRE(test_strategy(a, b) == 1);
+  REQUIRE(test_strategy_(a, b) == 1);
 }
 
 TEST_CASE_FIXTURE(
@@ -42,7 +42,7 @@ TEST_CASE_FIXTURE(
     "StrategyClampedTest_SecondStageOverflow_Exception [operation-strategy]") {
   constexpr auto a = kMaxValue / 2;
   constexpr int16_t b = 1;
-  REQUIRE(test_strategy(a, b) == 2);
+  REQUIRE(test_strategy_(a, b) == 2);
 }
 
 TEST_CASE_FIXTURE(
@@ -50,7 +50,7 @@ TEST_CASE_FIXTURE(
     "StrategyClampedTest_SecondStageUnderflow_Exception [operation-strategy]") {
   constexpr auto a = kMinValue / 2;
   constexpr int16_t b = -1;
-  REQUIRE(test_strategy(a, b) == 2);
+  REQUIRE(test_strategy_(a, b) == 2);
 }
 
 TEST_CASE_FIXTURE(
@@ -58,7 +58,7 @@ TEST_CASE_FIXTURE(
     "StrategyClampedTest_ThirdStageOverflow_Exception [operation-strategy]") {
   constexpr auto a = 1 + kMaxValue / 2;
   constexpr int16_t b = kMinValue / 2;
-  REQUIRE(test_strategy(a, b) == 0);
+  REQUIRE(test_strategy_(a, b) == 0);
 }
 
 TEST_CASE_FIXTURE(
@@ -66,7 +66,7 @@ TEST_CASE_FIXTURE(
     "StrategyClampedTest_ThirdStageUnderflow_Exception [operation-strategy]") {
   constexpr auto a = 1 - kMaxValue / 2;
   constexpr int16_t b = kMinValue / 2;
-  REQUIRE(test_strategy(a, b) == kMinValue / 2);
+  REQUIRE(test_strategy_(a, b) == kMinValue / 2);
 }
 
 TEST_CASE_FIXTURE(StrategyClampedTest,
@@ -74,13 +74,13 @@ TEST_CASE_FIXTURE(StrategyClampedTest,
                   "[operation-strategy]") {
   constexpr auto a = 1;
   constexpr int16_t b = 1;
-  REQUIRE_THROWS_AS(test_strategy(a, b), std::invalid_argument);
+  REQUIRE_THROWS_AS(test_strategy_(a, b), std::invalid_argument);
 }
 
 class StrategyCheckedTest {
  protected:
-  CheckedOperationWarper warper;
-  OperationStrategy test_strategy{warper};
+  CheckedOperationWarper warper_;
+  OperationStrategy test_strategy_{warper_};
 };
 
 TEST_CASE_FIXTURE(
@@ -88,7 +88,7 @@ TEST_CASE_FIXTURE(
     "StrategyCheckedTest_FirstStageOverflow_Exception [operation-strategy]") {
   constexpr auto a = kMaxValue;
   constexpr int16_t b = 1;
-  REQUIRE_THROWS_AS(test_strategy(a, b), std::overflow_error);
+  REQUIRE_THROWS_AS(test_strategy_(a, b), std::overflow_error);
 }
 
 TEST_CASE_FIXTURE(
@@ -96,7 +96,7 @@ TEST_CASE_FIXTURE(
     "StrategyCheckedTest_FirstStageUnderflow_Exception [operation-strategy]") {
   constexpr auto a = kMinValue;
   constexpr int16_t b = -1;
-  REQUIRE_THROWS_AS(test_strategy(a, b), std::underflow_error);
+  REQUIRE_THROWS_AS(test_strategy_(a, b), std::underflow_error);
 }
 
 TEST_CASE_FIXTURE(
@@ -104,7 +104,7 @@ TEST_CASE_FIXTURE(
     "StrategyCheckedTest_SecondStageOverflow_Exception [operation-strategy]") {
   constexpr auto a = kMaxValue / 2;
   constexpr int16_t b = 1;
-  REQUIRE_THROWS_AS(test_strategy(a, b), std::overflow_error);
+  REQUIRE_THROWS_AS(test_strategy_(a, b), std::overflow_error);
 }
 
 TEST_CASE_FIXTURE(
@@ -112,7 +112,7 @@ TEST_CASE_FIXTURE(
     "StrategyCheckedTest_SecondStageUnderflow_Exception [operation-strategy]") {
   constexpr auto a = kMinValue / 2;
   constexpr int16_t b = -1;
-  REQUIRE_THROWS_AS(test_strategy(a, b), std::underflow_error);
+  REQUIRE_THROWS_AS(test_strategy_(a, b), std::underflow_error);
 }
 
 TEST_CASE_FIXTURE(
@@ -120,7 +120,7 @@ TEST_CASE_FIXTURE(
     "StrategyCheckedTest_ThirdStageOverflow_Exception [operation-strategy]") {
   constexpr auto a = 1 + kMaxValue / 2;
   constexpr int16_t b = kMinValue / 2;
-  REQUIRE_THROWS_AS(test_strategy(a, b), std::overflow_error);
+  REQUIRE_THROWS_AS(test_strategy_(a, b), std::overflow_error);
 }
 
 TEST_CASE_FIXTURE(
@@ -128,7 +128,7 @@ TEST_CASE_FIXTURE(
     "StrategyCheckedTest_ThirdStageUnderflow_Exception [operation-strategy]") {
   constexpr auto a = 1 - kMaxValue / 2;
   constexpr int16_t b = kMinValue / 2;
-  REQUIRE_THROWS_AS(test_strategy(a, b), std::underflow_error);
+  REQUIRE_THROWS_AS(test_strategy_(a, b), std::underflow_error);
 }
 
 TEST_CASE_FIXTURE(StrategyCheckedTest,
@@ -136,7 +136,7 @@ TEST_CASE_FIXTURE(StrategyCheckedTest,
                   "[operation-strategy]") {
   constexpr auto a = 1;
   constexpr int16_t b = 1;
-  REQUIRE_THROWS_AS(test_strategy(a, b), std::invalid_argument);
+  REQUIRE_THROWS_AS(test_strategy_(a, b), std::invalid_argument);
 }
 
 }  // namespace vva

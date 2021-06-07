@@ -13,12 +13,12 @@ constexpr auto kMinValue = std::numeric_limits<int16_t>::min();
 namespace vva {
 class ClampedWarperTest {
  protected:
-  ClampedOperationWarper warper;
+  ClampedOperationWarper warper_;
 };
 
 TEST_CASE_FIXTURE(ClampedWarperTest,
                   "ClampedWarperTestAdd_OneToTwo_Three [clamped-warper]") {
-  REQUIRE(warper.addition(1, 2) == 3);
+  REQUIRE(warper_.addition(1, 2) == 3);
 }
 
 TEST_CASE_FIXTURE(
@@ -26,7 +26,7 @@ TEST_CASE_FIXTURE(
     "ClampedWarperTestAdd_SignedIntOverflow_ClampedToMax [clamped-warper]") {
   constexpr auto a = kMaxValue;
   constexpr int16_t b = 1;
-  REQUIRE(warper.addition(a, b) == kMaxValue);
+  REQUIRE(warper_.addition(a, b) == kMaxValue);
 }
 
 TEST_CASE_FIXTURE(
@@ -34,13 +34,13 @@ TEST_CASE_FIXTURE(
     "ClampedWarperTestAdd_SignedIntUnderflow_ClampedToMin [clamped-warper]") {
   constexpr auto a = kMinValue;
   constexpr int16_t b = -1;
-  REQUIRE(warper.addition(a, b) == kMinValue);
+  REQUIRE(warper_.addition(a, b) == kMinValue);
 }
 
 TEST_CASE_FIXTURE(
     ClampedWarperTest,
     "ClampedWarperTestSubtract_ThreeByFive_Two [clamped-warper]") {
-  REQUIRE(warper.subtraction(5, 3) == 2);
+  REQUIRE(warper_.subtraction(5, 3) == 2);
 }
 
 TEST_CASE_FIXTURE(ClampedWarperTest,
@@ -48,7 +48,7 @@ TEST_CASE_FIXTURE(ClampedWarperTest,
                   "[clamped-warper]") {
   constexpr auto a = kMinValue;
   constexpr int16_t b = 1;
-  REQUIRE(warper.subtraction(a, b) == kMinValue);
+  REQUIRE(warper_.subtraction(a, b) == kMinValue);
 }
 
 TEST_CASE_FIXTURE(ClampedWarperTest,
@@ -56,13 +56,13 @@ TEST_CASE_FIXTURE(ClampedWarperTest,
                   "[clamped-warper]") {
   constexpr auto a = kMaxValue;
   constexpr int16_t b = -1;
-  REQUIRE(warper.subtraction(a, b) == kMaxValue);
+  REQUIRE(warper_.subtraction(a, b) == kMaxValue);
 }
 
 TEST_CASE_FIXTURE(
     ClampedWarperTest,
     "ClampedWarperTestMultiply_FiveBySix_Thirty [clamped-warper]") {
-  REQUIRE(warper.multiplication(5, 6) == 30);
+  REQUIRE(warper_.multiplication(5, 6) == 30);
 }
 
 TEST_CASE_FIXTURE(ClampedWarperTest,
@@ -70,7 +70,7 @@ TEST_CASE_FIXTURE(ClampedWarperTest,
                   "[clamped-warper]") {
   constexpr auto a = kMaxValue;
   constexpr int16_t b = 2;
-  REQUIRE(warper.multiplication(a, b) == kMaxValue);
+  REQUIRE(warper_.multiplication(a, b) == kMaxValue);
 }
 
 TEST_CASE_FIXTURE(ClampedWarperTest,
@@ -78,12 +78,12 @@ TEST_CASE_FIXTURE(ClampedWarperTest,
                   "[clamped-warper]") {
   constexpr auto a = kMinValue;
   constexpr int16_t b = 2;
-  REQUIRE(warper.multiplication(a, b) == kMinValue);
+  REQUIRE(warper_.multiplication(a, b) == kMinValue);
 }
 
 TEST_CASE_FIXTURE(ClampedWarperTest,
                   "ClampedWarperTestDivide_TenByTwo_Five [clamped-warper]") {
-  REQUIRE(warper.division(10, 2) == 5);
+  REQUIRE(warper_.division(10, 2) == 5);
 }
 
 TEST_CASE_FIXTURE(
@@ -91,7 +91,7 @@ TEST_CASE_FIXTURE(
     "ClampedWarperTestDivide_DivisionByZero_Exception [clamped-warper]") {
   constexpr auto a = 10;
   constexpr int16_t b = 0;
-  REQUIRE_THROWS_AS(warper.division(a, b), std::invalid_argument);
+  REQUIRE_THROWS_AS(warper_.division(a, b), std::invalid_argument);
 }
 
 }  // namespace vva
