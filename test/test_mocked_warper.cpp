@@ -24,22 +24,22 @@ namespace Matchers {
 class ExceptionWatcher : public MatcherBase<std::exception> {
  public:
   ExceptionWatcher(std::string const& expected_message)
-      : m_expected_message(expected_message) {}
+      : expected_message_(expected_message) {}
 
   bool match(std::exception const& e) const override {
-    return e.what() == m_expected_message;
+    return e.what() == expected_message_;
   }
 
   std::string describe() const override {
-    return "compare the exception what() message with \"" + m_expected_message +
+    return "compare the exception what() message with \"" + expected_message_ +
            "\".";
   }
 
  private:
-  std::string m_expected_message;
+  std::string expected_message_;
 };
 
-inline ExceptionWatcher ExceptionMessage(std::string const& expeted_message) {
+ExceptionWatcher ExceptionMessage(std::string const& expeted_message) {
   return ExceptionWatcher(expeted_message);
 }
 
@@ -49,22 +49,22 @@ inline ExceptionWatcher ExceptionMessage(std::string const& expeted_message) {
 namespace vva {
 class MockedWarperTest {
  protected:
-  fakeit::Mock<IOperationWarper> mockWarper;
+  fakeit::Mock<IOperationWarper> mockWarper_;
 };
 
 TEST_CASE_METHOD(MockedWarperTest, "MockedWarperTestAdd_OneToTwo_Three",
                  "[mock-warper]") {
-  When(Method(mockWarper, addition).Using(1, 2)).Return(3);
+  When(Method(mockWarper_, addition).Using(1, 2)).Return(3);
 
-  REQUIRE(CallMock(mockWarper.get(), &IOperationWarper::addition, 1, 2) == 3);
+  REQUIRE(CallMock(mockWarper_.get(), &IOperationWarper::addition, 1, 2) == 3);
 }
 
 // This test intentionally produces wrong result
 TEST_CASE_METHOD(MockedWarperTest, "MockedWarperTestAdd_OneToTwo_Four",
                  "[mock-warper]") {
-  When(Method(mockWarper, addition)).Return(4);
+  When(Method(mockWarper_, addition)).Return(4);
 
-  REQUIRE(CallMock(mockWarper.get(), &IOperationWarper::addition, 1, 2) == 4);
+  REQUIRE(CallMock(mockWarper_.get(), &IOperationWarper::addition, 1, 2) == 4);
 }
 
 TEST_CASE_METHOD(MockedWarperTest,
@@ -76,11 +76,11 @@ TEST_CASE_METHOD(MockedWarperTest,
   // Message intentionally is different than the actual one
   const auto exception_message = "Overflow Error";
 
-  When(Method(mockWarper, addition).Using(a, b))
+  When(Method(mockWarper_, addition).Using(a, b))
       .Throw(std::overflow_error(exception_message));
 
   REQUIRE_THROWS_MATCHES(
-      CallMock(mockWarper.get(), &IOperationWarper::addition, a, b),
+      CallMock(mockWarper_.get(), &IOperationWarper::addition, a, b),
       std::overflow_error,
       Catch::Matchers::ExceptionMessage(exception_message));
 }
@@ -91,9 +91,9 @@ TEST_CASE_METHOD(MockedWarperTest,
   constexpr auto a = kMaxValue;
   constexpr int16_t b = 1;
 
-  When(Method(mockWarper, addition).Using(a, b)).Return(a);
+  When(Method(mockWarper_, addition).Using(a, b)).Return(a);
 
-  REQUIRE(CallMock(mockWarper.get(), &IOperationWarper::addition, a, b) == a);
+  REQUIRE(CallMock(mockWarper_.get(), &IOperationWarper::addition, a, b) == a);
 }
 
 }  // namespace vva
