@@ -9,6 +9,46 @@ constexpr auto kMaxValue = std::numeric_limits<int16_t>::max();
 constexpr auto kMinValue = std::numeric_limits<int16_t>::min();
 }  // namespace
 
+namespace Catch
+{
+namespace Matchers
+{
+class ExceptionWatcher
+    : public MatcherBase<std::exception>
+{
+public:
+    ExceptionWatcher(std::string const & expected_message)
+        : m_expected_message(expected_message)
+    {
+    }
+
+    bool match(std::exception const & e) const override
+    {
+        return e.what() == m_expected_message;
+    }
+
+    std::string describe() const override
+    {
+        return "compare the exception what() message with \""
+             + m_expected_message
+             + "\".";
+    }
+
+private:
+    std::string  m_expected_message;
+};
+
+
+inline ExceptionWatcher ExceptionMessage(std::string const & expeted_message)
+{
+    return ExceptionWatcher(expeted_message);
+}
+
+}
+// Matchers namespace
+}
+// Catch namespace
+
 namespace vva {
 class CheckedWarperTest {
  protected:
@@ -26,6 +66,10 @@ TEST_CASE_METHOD(CheckedWarperTest,
   constexpr auto a = kMaxValue;
   constexpr int16_t b = 1;
   REQUIRE_THROWS_AS(warper.addition(a, b), std::overflow_error);
+
+    REQUIRE_THROWS_MATCHES(warper.addition(a, b),
+  std::overflow_error, Catch::Matchers::ExceptionMessage("Overflow")
+  );
 }
 
 TEST_CASE_METHOD(CheckedWarperTest,
@@ -33,7 +77,10 @@ TEST_CASE_METHOD(CheckedWarperTest,
                  "[checked-warper]") {
   constexpr auto a = kMinValue;
   constexpr int16_t b = -1;
-  REQUIRE_THROWS_AS(warper.addition(a, b), std::underflow_error);
+
+      REQUIRE_THROWS_MATCHES(warper.addition(a, b),
+  std::underflow_error, Catch::Matchers::ExceptionMessage("Underflow")
+  );
 }
 
 TEST_CASE_METHOD(CheckedWarperTest, "CheckedWarperTestSubtract_ThreeByFive_Two",
@@ -90,6 +137,10 @@ TEST_CASE_METHOD(CheckedWarperTest,
   constexpr auto a = 10;
   constexpr int16_t b = 0;
   REQUIRE_THROWS_AS(warper.division(a, b), std::invalid_argument);
+
+        REQUIRE_THROWS_MATCHES(warper.division(a, b),
+  std::invalid_argument, Catch::Matchers::ExceptionMessage("Division by zero")
+  );
 }
 
 }  // namespace vva
