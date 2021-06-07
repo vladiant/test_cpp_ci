@@ -9,15 +9,42 @@ constexpr auto kMaxValue = std::numeric_limits<int16_t>::max();
 constexpr auto kMinValue = std::numeric_limits<int16_t>::min();
 }  // namespace
 
+namespace Catch {
+namespace Matchers {
+class ExceptionWatcher : public MatcherBase<std::exception> {
+ public:
+  ExceptionWatcher(std::string const& expected_message)
+      : expected_message_(expected_message) {}
+
+  bool match(std::exception const& e) const override {
+    return e.what() == expected_message_;
+  }
+
+  std::string describe() const override {
+    return "compare the exception what() message with \"" + expected_message_ +
+           "\".";
+  }
+
+ private:
+  std::string expected_message_;
+};
+
+inline ExceptionWatcher ExceptionMessage(std::string const& expeted_message) {
+  return ExceptionWatcher(expeted_message);
+}
+
+}  // namespace Matchers
+}  // namespace Catch
+
 namespace vva {
 class CheckedWarperTest {
  protected:
-  CheckedOperationWarper warper;
+  CheckedOperationWarper warper_;
 };
 
 TEST_CASE_METHOD(CheckedWarperTest, "CheckedWarperTestAdd_OneToTwo_Three",
                  "[checked-warper]") {
-  REQUIRE(warper.addition(1, 2) == 3);
+  REQUIRE(warper_.addition(1, 2) == 3);
 }
 
 TEST_CASE_METHOD(CheckedWarperTest,
@@ -25,7 +52,10 @@ TEST_CASE_METHOD(CheckedWarperTest,
                  "[checked-warper]") {
   constexpr auto a = kMaxValue;
   constexpr int16_t b = 1;
-  REQUIRE_THROWS_AS(warper.addition(a, b), std::overflow_error);
+  REQUIRE_THROWS_AS(warper_.addition(a, b), std::overflow_error);
+
+  REQUIRE_THROWS_MATCHES(warper_.addition(a, b), std::overflow_error,
+                         Catch::Matchers::ExceptionMessage("Overflow"));
 }
 
 TEST_CASE_METHOD(CheckedWarperTest,
@@ -33,12 +63,14 @@ TEST_CASE_METHOD(CheckedWarperTest,
                  "[checked-warper]") {
   constexpr auto a = kMinValue;
   constexpr int16_t b = -1;
-  REQUIRE_THROWS_AS(warper.addition(a, b), std::underflow_error);
+
+  REQUIRE_THROWS_MATCHES(warper_.addition(a, b), std::underflow_error,
+                         Catch::Matchers::ExceptionMessage("Underflow"));
 }
 
 TEST_CASE_METHOD(CheckedWarperTest, "CheckedWarperTestSubtract_ThreeByFive_Two",
                  "[checked-warper]") {
-  REQUIRE(warper.subtraction(5, 3) == 2);
+  REQUIRE(warper_.subtraction(5, 3) == 2);
 }
 
 TEST_CASE_METHOD(CheckedWarperTest,
@@ -46,7 +78,7 @@ TEST_CASE_METHOD(CheckedWarperTest,
                  "[checked-warper]") {
   constexpr auto a = kMinValue;
   constexpr int16_t b = 1;
-  REQUIRE_THROWS_AS(warper.subtraction(a, b), std::underflow_error);
+  REQUIRE_THROWS_AS(warper_.subtraction(a, b), std::underflow_error);
 }
 
 TEST_CASE_METHOD(CheckedWarperTest,
@@ -54,13 +86,13 @@ TEST_CASE_METHOD(CheckedWarperTest,
                  "[checked-warper]") {
   constexpr auto a = kMaxValue;
   constexpr int16_t b = -1;
-  REQUIRE_THROWS_AS(warper.subtraction(a, b), std::overflow_error);
+  REQUIRE_THROWS_AS(warper_.subtraction(a, b), std::overflow_error);
 }
 
 TEST_CASE_METHOD(CheckedWarperTest,
                  "CheckedWarperTestMultiply_FiveBySix_Thirty",
                  "[checked-warper]") {
-  REQUIRE(warper.multiplication(5, 6) == 30);
+  REQUIRE(warper_.multiplication(5, 6) == 30);
 }
 
 TEST_CASE_METHOD(CheckedWarperTest,
@@ -68,7 +100,7 @@ TEST_CASE_METHOD(CheckedWarperTest,
                  "[checked-warper]") {
   constexpr auto a = kMaxValue;
   constexpr int16_t b = 2;
-  REQUIRE_THROWS_AS(warper.multiplication(a, b), std::overflow_error);
+  REQUIRE_THROWS_AS(warper_.multiplication(a, b), std::overflow_error);
 }
 
 TEST_CASE_METHOD(CheckedWarperTest,
@@ -76,12 +108,12 @@ TEST_CASE_METHOD(CheckedWarperTest,
                  "[checked-warper]") {
   constexpr auto a = kMinValue;
   constexpr int16_t b = 2;
-  REQUIRE_THROWS_AS(warper.multiplication(a, b), std::underflow_error);
+  REQUIRE_THROWS_AS(warper_.multiplication(a, b), std::underflow_error);
 }
 
 TEST_CASE_METHOD(CheckedWarperTest, "CheckedWarperTestDivide_TenByTwo_Five",
                  "[checked-warper]") {
-  REQUIRE(warper.division(10, 2) == 5);
+  REQUIRE(warper_.division(10, 2) == 5);
 }
 
 TEST_CASE_METHOD(CheckedWarperTest,
@@ -89,7 +121,10 @@ TEST_CASE_METHOD(CheckedWarperTest,
                  "[checked-warper]") {
   constexpr auto a = 10;
   constexpr int16_t b = 0;
-  REQUIRE_THROWS_AS(warper.division(a, b), std::invalid_argument);
+  REQUIRE_THROWS_AS(warper_.division(a, b), std::invalid_argument);
+
+  REQUIRE_THROWS_MATCHES(warper_.division(a, b), std::invalid_argument,
+                         Catch::Matchers::ExceptionMessage("Division by zero"));
 }
 
 }  // namespace vva
