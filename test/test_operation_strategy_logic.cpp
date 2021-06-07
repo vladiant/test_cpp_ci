@@ -27,7 +27,7 @@ class MockWarper : public IOperationWarper {
 
 class MockedOperationStrategyTest : public testing::Test {
  protected:
-  MockWarper mockWarper;
+  MockWarper mockWarper_;
 };
 
 TEST_F(MockedOperationStrategyTest, MockOperationStrategy_Arg_Result) {
@@ -39,20 +39,20 @@ TEST_F(MockedOperationStrategyTest, MockOperationStrategy_Arg_Result) {
   constexpr int16_t second_stage_result = 16;
   constexpr int16_t third_stage_result = 4;
 
-  EXPECT_CALL(mockWarper, addition(first_arg, second_arg))
+  EXPECT_CALL(mockWarper_, addition(first_arg, second_arg))
       .Times(1)
       .WillOnce(Return(first_stage_result));
-  EXPECT_CALL(mockWarper, multiplication(first_stage_result, 2))
+  EXPECT_CALL(mockWarper_, multiplication(first_stage_result, 2))
       .Times(1)
       .WillOnce(Return(second_stage_result));
-  EXPECT_CALL(mockWarper, subtraction(first_arg, second_arg))
+  EXPECT_CALL(mockWarper_, subtraction(first_arg, second_arg))
       .Times(1)
       .WillOnce(Return(third_stage_result));
-  EXPECT_CALL(mockWarper, division(second_stage_result, third_stage_result))
+  EXPECT_CALL(mockWarper_, division(second_stage_result, third_stage_result))
       .Times(1)
       .WillOnce(Return(operation_result));
 
-  OperationStrategy test_strategy(mockWarper);
+  OperationStrategy test_strategy(mockWarper_);
 
   EXPECT_EQ(test_strategy(first_arg, second_arg), operation_result);
 }
