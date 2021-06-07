@@ -21,28 +21,28 @@ int16_t CallMock(vva::IOperationWarper& warper, Func func, Args... args) {
 
 namespace vva {
 struct MockedWarperTest {
-  fakeit::Mock<IOperationWarper> mockWarper;
+  fakeit::Mock<IOperationWarper> mockWarper_;
 };
 
 UTEST_F_SETUP(MockedWarperTest) {
-  static_cast<void>(utest_fixture->mockWarper);
+  static_cast<void>(utest_fixture->mockWarper_);
 }
 
 UTEST_F_TEARDOWN(MockedWarperTest) {
-  static_cast<void>(utest_fixture->mockWarper);
+  static_cast<void>(utest_fixture->mockWarper_);
 }
 
 UTEST_F(MockedWarperTest, MockedWarperTestAdd_OneToTwo_Three) {
-  When(Method(utest_fixture->mockWarper, addition).Using(1, 2)).Return(3);
+  When(Method(utest_fixture->mockWarper_, addition).Using(1, 2)).Return(3);
 
-  EXPECT_EQ(CallMock(utest_fixture->mockWarper.get(), &IOperationWarper::addition, 1, 2) , 3);
+  EXPECT_EQ(CallMock(utest_fixture->mockWarper_.get(), &IOperationWarper::addition, 1, 2) , 3);
 }
 
 // This test intentionally produces wrong result
 UTEST_F(MockedWarperTest, MockedWarperTestAdd_OneToTwo_Four) {
-  When(Method(utest_fixture->mockWarper, addition)).Return(4);
+  When(Method(utest_fixture->mockWarper_, addition)).Return(4);
 
-  EXPECT_EQ(CallMock(utest_fixture->mockWarper.get(), &IOperationWarper::addition, 1, 2) , 4);
+  EXPECT_EQ(CallMock(mockWarper_->mockWarper.get(), &IOperationWarper::addition, 1, 2) , 4);
 }
 
 // UTEST_F(MockedWarperTest,
@@ -50,22 +50,22 @@ UTEST_F(MockedWarperTest, MockedWarperTestAdd_OneToTwo_Four) {
 //   constexpr auto a = kMaxValue;
 //   constexpr int16_t b = 1;
 
-//   When(Method(utest_fixture->mockWarper, addition).Using(a, b))
-//       .Throw(std::overflow_error(EXPECT_EQ_THROWS_MATCHES));
+  When(Method(mockWarper_, addition).Using(a, b))
+      .Throw(std::overflow_error("REQUIRE_THROWS_MATCHES"));
 
-//   EXPECT_EQ_THROWS_AS(
-//       CallMock(utest_fixture->mockWarper.get(), &IOperationWarper::addition, a, b),
-//       std::overflow_error);
-// }
+  REQUIRE_THROWS_AS(
+      CallMock(mockWarper_.get(), &IOperationWarper::addition, a, b),
+      std::overflow_error);
+}
 
 UTEST_F(MockedWarperTest,
                  MockedWarperTestAdd_SignedIntOverflowClamped) {
   constexpr auto a = kMaxValue;
   constexpr int16_t b = 1;
 
-  When(Method(utest_fixture->mockWarper, addition).Using(a, b)).Return(a);
+  When(Method(utest_fixture->mockWarper_, addition).Using(a, b)).Return(a);
 
-  EXPECT_EQ(CallMock(utest_fixture->mockWarper.get(), &IOperationWarper::addition, a, b) , a);
+  EXPECT_EQ(CallMock(utest_fixture->mockWarper_.get(), &IOperationWarper::addition, a, b) , a);
 }
 
 }  // namespace vva
