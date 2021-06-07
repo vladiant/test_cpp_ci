@@ -23,30 +23,30 @@ int16_t CallMock(vva::IOperationWarper& warper, Func func, Args... args) {
 namespace vva {
 class MockedWarperTest : public testing::Test {
  protected:
-  fakeit::Mock<IOperationWarper> mockWarper;
+  fakeit::Mock<IOperationWarper> mockWarper_;
 };
 
 TEST_F(MockedWarperTest, MockedWarperTestAdd_OneToTwo_Three) {
-  When(Method(mockWarper, addition).Using(1, 2)).Return(3);
+  When(Method(mockWarper_, addition).Using(1, 2)).Return(3);
 
-  EXPECT_EQ(CallMock(mockWarper.get(), &IOperationWarper::addition, 1, 2), 3);
+  EXPECT_EQ(CallMock(mockWarper_.get(), &IOperationWarper::addition, 1, 2), 3);
 }
 
 // This test intentionally produces wrong result
 TEST_F(MockedWarperTest, MockedWarperTestAdd_OneToTwo_Four) {
-  When(Method(mockWarper, addition)).Return(4);
+  When(Method(mockWarper_, addition)).Return(4);
 
-  EXPECT_EQ(CallMock(mockWarper.get(), &IOperationWarper::addition, 1, 2), 4);
+  EXPECT_EQ(CallMock(mockWarper_.get(), &IOperationWarper::addition, 1, 2), 4);
 }
 
 TEST_F(MockedWarperTest, MockedWarperTestAdd_SignedIntOverflowException) {
   constexpr auto a = kMaxValue;
   constexpr int16_t b = 1;
 
-  When(Method(mockWarper, addition).Using(a, b))
+  When(Method(mockWarper_, addition).Using(a, b))
       .Throw(std::overflow_error("REQUIRE_THROWS_MATCHES"));
 
-  EXPECT_THROW(CallMock(mockWarper.get(), &IOperationWarper::addition, a, b),
+  EXPECT_THROW(CallMock(mockWarper_.get(), &IOperationWarper::addition, a, b),
                std::overflow_error);
 }
 
@@ -54,9 +54,9 @@ TEST_F(MockedWarperTest, MockedWarperTestAdd_SignedIntOverflowClamped) {
   constexpr auto a = kMaxValue;
   constexpr int16_t b = 1;
 
-  When(Method(mockWarper, addition).Using(a, b)).Return(a);
+  When(Method(mockWarper_, addition).Using(a, b)).Return(a);
 
-  EXPECT_EQ(CallMock(mockWarper.get(), &IOperationWarper::addition, a, b), a);
+  EXPECT_EQ(CallMock(mockWarper_.get(), &IOperationWarper::addition, a, b), a);
 }
 
 }  // namespace vva
