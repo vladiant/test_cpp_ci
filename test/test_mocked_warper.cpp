@@ -44,9 +44,7 @@ inline ExceptionWatcher ExceptionMessage(std::string const& expeted_message) {
 }
 
 }  // namespace Matchers
-// Matchers namespace
 }  // namespace Catch
-// Catch namespace
 
 namespace vva {
 class MockedWarperTest {
