@@ -1,5 +1,6 @@
-#include <basic_warper.hpp>
 #include <utest/utest.h>
+
+#include <basic_warper.hpp>
 #include <checked_warper.hpp>
 #include <clamped_warper.hpp>
 #include <cstdint>
@@ -29,46 +30,44 @@ UTEST_F_TEARDOWN(StrategyClampedTest) {
   static_cast<void>(utest_fixture->test_strategy_);
 }
 
-UTEST_F(StrategyClampedTest,
-                 StrategyClampedTest_FirstStageOverflow_Exception) {
+UTEST_F(StrategyClampedTest, StrategyClampedTest_FirstStageOverflow_Exception) {
   constexpr auto a = kMaxValue;
   constexpr int16_t b = 1;
-  EXPECT_EQ(utest_fixture->test_strategy_(a, b) , 1);
+  EXPECT_EQ(utest_fixture->test_strategy_(a, b), 1);
 }
 
 UTEST_F(StrategyClampedTest,
-                 StrategyClampedTest_FirstStageUnderflow_Exception) {
+        StrategyClampedTest_FirstStageUnderflow_Exception) {
   constexpr auto a = kMinValue;
   constexpr int16_t b = -1;
-  EXPECT_EQ(utest_fixture->test_strategy_(a, b) , 1);
+  EXPECT_EQ(utest_fixture->test_strategy_(a, b), 1);
 }
 
 UTEST_F(StrategyClampedTest,
-                 StrategyClampedTest_SecondStageOverflow_Exception) {
+        StrategyClampedTest_SecondStageOverflow_Exception) {
   constexpr auto a = kMaxValue / 2;
   constexpr int16_t b = 1;
-  EXPECT_EQ(utest_fixture->test_strategy_(a, b) , 2);
+  EXPECT_EQ(utest_fixture->test_strategy_(a, b), 2);
 }
 
 UTEST_F(StrategyClampedTest,
-                 StrategyClampedTest_SecondStageUnderflow_Exception) {
+        StrategyClampedTest_SecondStageUnderflow_Exception) {
   constexpr auto a = kMinValue / 2;
   constexpr int16_t b = -1;
-  EXPECT_EQ(utest_fixture->test_strategy_(a, b) , 2);
+  EXPECT_EQ(utest_fixture->test_strategy_(a, b), 2);
 }
 
-UTEST_F(StrategyClampedTest,
-                 StrategyClampedTest_ThirdStageOverflow_Exception) {
+UTEST_F(StrategyClampedTest, StrategyClampedTest_ThirdStageOverflow_Exception) {
   constexpr auto a = 1 + kMaxValue / 2;
   constexpr int16_t b = kMinValue / 2;
-  EXPECT_EQ(utest_fixture->test_strategy_(a, b) , 0);
+  EXPECT_EQ(utest_fixture->test_strategy_(a, b), 0);
 }
 
 UTEST_F(StrategyClampedTest,
-                 StrategyClampedTest_ThirdStageUnderflow_Exception) {
+        StrategyClampedTest_ThirdStageUnderflow_Exception) {
   constexpr auto a = 1 - kMaxValue / 2;
   constexpr int16_t b = kMinValue / 2;
-  EXPECT_EQ(utest_fixture->test_strategy_(a, b) , kMinValue / 2);
+  EXPECT_EQ(utest_fixture->test_strategy_(a, b), kMinValue / 2);
 }
 
 // UTEST_F(StrategyClampedTest,

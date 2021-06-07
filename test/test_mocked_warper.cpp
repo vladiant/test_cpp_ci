@@ -1,4 +1,5 @@
 #include <utest/utest.h>
+
 #include <cstdint>
 #include <fakeit/fakeit.hpp>
 #include <i_warper.hpp>
@@ -35,14 +36,18 @@ UTEST_F_TEARDOWN(MockedWarperTest) {
 UTEST_F(MockedWarperTest, MockedWarperTestAdd_OneToTwo_Three) {
   When(Method(utest_fixture->mockWarper_, addition).Using(1, 2)).Return(3);
 
-  EXPECT_EQ(CallMock(utest_fixture->mockWarper_.get(), &IOperationWarper::addition, 1, 2) , 3);
+  EXPECT_EQ(CallMock(utest_fixture->mockWarper_.get(),
+                     &IOperationWarper::addition, 1, 2),
+            3);
 }
 
 // This test intentionally produces wrong result
 UTEST_F(MockedWarperTest, MockedWarperTestAdd_OneToTwo_Four) {
   When(Method(utest_fixture->mockWarper_, addition)).Return(4);
 
-  EXPECT_EQ(CallMock(mockWarper_->mockWarper.get(), &IOperationWarper::addition, 1, 2) , 4);
+  EXPECT_EQ(CallMock(mockWarper_->mockWarper.get(), &IOperationWarper::addition,
+                     1, 2),
+            4);
 }
 
 // UTEST_F(MockedWarperTest,
@@ -50,22 +55,23 @@ UTEST_F(MockedWarperTest, MockedWarperTestAdd_OneToTwo_Four) {
 //   constexpr auto a = kMaxValue;
 //   constexpr int16_t b = 1;
 
-  When(Method(mockWarper_, addition).Using(a, b))
-      .Throw(std::overflow_error("REQUIRE_THROWS_MATCHES"));
+When(Method(mockWarper_, addition).Using(a, b))
+    .Throw(std::overflow_error("REQUIRE_THROWS_MATCHES"));
 
-  REQUIRE_THROWS_AS(
-      CallMock(mockWarper_.get(), &IOperationWarper::addition, a, b),
-      std::overflow_error);
-}
+REQUIRE_THROWS_AS(CallMock(mockWarper_.get(), &IOperationWarper::addition, a,
+                           b),
+                  std::overflow_error);
+}  // namespace vva
 
-UTEST_F(MockedWarperTest,
-                 MockedWarperTestAdd_SignedIntOverflowClamped) {
+UTEST_F(MockedWarperTest, MockedWarperTestAdd_SignedIntOverflowClamped) {
   constexpr auto a = kMaxValue;
   constexpr int16_t b = 1;
 
   When(Method(utest_fixture->mockWarper_, addition).Using(a, b)).Return(a);
 
-  EXPECT_EQ(CallMock(utest_fixture->mockWarper_.get(), &IOperationWarper::addition, a, b) , a);
+  EXPECT_EQ(CallMock(utest_fixture->mockWarper_.get(),
+                     &IOperationWarper::addition, a, b),
+            a);
 }
 
 }  // namespace vva

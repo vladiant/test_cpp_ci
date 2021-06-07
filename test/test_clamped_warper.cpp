@@ -1,4 +1,5 @@
 #include <utest/utest.h>
+
 #include <clamped_warper.hpp>
 #include <cstdint>
 #include <limits>
@@ -14,78 +15,76 @@ struct ClampedWarperTest {
   ClampedOperationWarper warper_;
 };
 
-UTEST_F_SETUP(ClampedWarperTest) {
-  static_cast<void>(utest_fixture->warper_);
-}
+UTEST_F_SETUP(ClampedWarperTest) { static_cast<void>(utest_fixture->warper_); }
 
 UTEST_F_TEARDOWN(ClampedWarperTest) {
   static_cast<void>(utest_fixture->warper_);
 }
 
 UTEST_F(ClampedWarperTest, ClampedWarperTestAdd_OneToTwo_Three) {
-  EXPECT_EQ(utest_fixture->warper_.addition(1, 2) , 3);
+  EXPECT_EQ(utest_fixture->warper_.addition(1, 2), 3);
 }
 
 UTEST_F(ClampedWarperTest,
-                 ClampedWarperTestAdd_SignedIntOverflow_ClampedToMax) {
+        ClampedWarperTestAdd_SignedIntOverflow_ClampedToMax) {
   constexpr auto a = kMaxValue;
   constexpr int16_t b = 1;
-  EXPECT_EQ(utest_fixture->warper_.addition(a, b) , kMaxValue);
+  EXPECT_EQ(utest_fixture->warper_.addition(a, b), kMaxValue);
 }
 
 UTEST_F(ClampedWarperTest,
-                 ClampedWarperTestAdd_SignedIntUnderflow_ClampedToMin) {
+        ClampedWarperTestAdd_SignedIntUnderflow_ClampedToMin) {
   constexpr auto a = kMinValue;
   constexpr int16_t b = -1;
-  EXPECT_EQ(utest_fixture->warper_.addition(a, b) , kMinValue);
+  EXPECT_EQ(utest_fixture->warper_.addition(a, b), kMinValue);
 }
 
 UTEST_F(ClampedWarperTest, ClampedWarperTestSubtract_ThreeByFive_Two) {
-  EXPECT_EQ(utest_fixture->warper_.subtraction(5, 3) , 2);
+  EXPECT_EQ(utest_fixture->warper_.subtraction(5, 3), 2);
 }
 
 UTEST_F(ClampedWarperTest,
-                 ClampedWarperTestSubtract_SignedIntOverflow_ClampedToMax) {
+        ClampedWarperTestSubtract_SignedIntOverflow_ClampedToMax) {
   constexpr auto a = kMinValue;
   constexpr int16_t b = 1;
-  EXPECT_EQ(utest_fixture->warper_.subtraction(a, b) , kMinValue);
+  EXPECT_EQ(utest_fixture->warper_.subtraction(a, b), kMinValue);
 }
 
 UTEST_F(ClampedWarperTest,
-                 ClampedWarperTestSubtract_SignedIntUnderflow_ClampedToMin) {
+        ClampedWarperTestSubtract_SignedIntUnderflow_ClampedToMin) {
   constexpr auto a = kMaxValue;
   constexpr int16_t b = -1;
-  EXPECT_EQ(utest_fixture->warper_.subtraction(a, b) , kMaxValue);
+  EXPECT_EQ(utest_fixture->warper_.subtraction(a, b), kMaxValue);
+}
+
+UTEST_F(ClampedWarperTest, ClampedWarperTestMultiply_FiveBySix_Thirty) {
+  EXPECT_EQ(utest_fixture->warper_.multiplication(5, 6), 30);
 }
 
 UTEST_F(ClampedWarperTest,
-                 ClampedWarperTestMultiply_FiveBySix_Thirty) {
-  EXPECT_EQ(utest_fixture->warper_.multiplication(5, 6) , 30);
-}
-
-UTEST_F(ClampedWarperTest,
-                 ClampedWarperTestMultiply_SignedIntOverflow_ClampedToMax) {
+        ClampedWarperTestMultiply_SignedIntOverflow_ClampedToMax) {
   constexpr auto a = kMaxValue;
   constexpr int16_t b = 2;
-  EXPECT_EQ(utest_fixture->warper_.multiplication(a, b) , kMaxValue);
+  EXPECT_EQ(utest_fixture->warper_.multiplication(a, b), kMaxValue);
 }
 
 UTEST_F(ClampedWarperTest,
-                 ClampedWarperTestMultiply_SignedIntUnderflow_ClampedToMin) {
+        ClampedWarperTestMultiply_SignedIntUnderflow_ClampedToMin) {
   constexpr auto a = kMinValue;
   constexpr int16_t b = 2;
-  EXPECT_EQ(utest_fixture->warper_.multiplication(a, b) , kMinValue);
+  EXPECT_EQ(utest_fixture->warper_.multiplication(a, b), kMinValue);
 }
 
 UTEST_F(ClampedWarperTest, ClampedWarperTestDivide_TenByTwo_Five) {
-  EXPECT_EQ(utest_fixture->warper_.division(10, 2) , 5);
+  EXPECT_EQ(utest_fixture->warper_.division(10, 2), 5);
 }
 
 // UTEST_F(ClampedWarperTest,
 //                  ClampedWarperTestDivide_DivisionByZero_Exception) {
 //   constexpr auto a = 10;
 //   constexpr int16_t b = 0;
-//   EXPECT_EQ_THROWS_AS(utest_fixture->warper_.division(a, b), std::invalid_argument);
+//   EXPECT_EQ_THROWS_AS(utest_fixture->warper_.division(a, b),
+//   std::invalid_argument);
 // }
 
 }  // namespace vva
