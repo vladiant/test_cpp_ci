@@ -1,0 +1,32 @@
+name: Ubuntu Valgrind
+
+on: [push]
+
+env:
+  BUILD_TYPE: Debug
+
+jobs:
+  build:
+    name: Build Executables
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Create Build Environment     
+      run: cmake -E make_directory ${{github.workspace}}/build
+
+    - name: Configure CMake    
+      shell: bash
+      working-directory: ${{github.workspace}}/build   
+      run: cmake $GITHUB_WORKSPACE .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+
+    - name: Build
+      working-directory: ${{github.workspace}}/build
+      shell: bash
+      run: cmake --build . --config $BUILD_TYPE
+
+    - name: Memcheck Test
+      working-directory: ${{github.workspace}}/build-clang
+      shell: bash
+      run: ctest -C $BUILD_TYPE -D ExperimentalMemCheck
