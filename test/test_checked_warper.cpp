@@ -52,8 +52,6 @@ TEST_CASE_METHOD(CheckedWarperTest,
                  "[checked-warper]") {
   constexpr auto a = kMaxValue;
   constexpr int16_t b = 1;
-  REQUIRE_THROWS_AS(warper_.addition(a, b), std::overflow_error);
-
   REQUIRE_THROWS_MATCHES(warper_.addition(a, b), std::overflow_error,
                          Catch::Matchers::ExceptionMessage("Overflow"));
 }
@@ -121,8 +119,6 @@ TEST_CASE_METHOD(CheckedWarperTest,
                  "[checked-warper]") {
   constexpr auto a = 10;
   constexpr int16_t b = 0;
-  REQUIRE_THROWS_AS(warper_.division(a, b), std::invalid_argument);
-
   REQUIRE_THROWS_MATCHES(warper_.division(a, b), std::invalid_argument,
                          Catch::Matchers::ExceptionMessage("Division by zero"));
 }
