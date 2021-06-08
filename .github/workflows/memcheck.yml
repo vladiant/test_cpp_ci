@@ -13,11 +13,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Install Valgrind
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y valgrind
-
     - name: Create Build Environment     
       run: cmake -E make_directory ${{github.workspace}}/build
 
@@ -32,6 +27,6 @@ jobs:
       run: cmake --build . --config $BUILD_TYPE
 
     - name: Memcheck Test
-      working-directory: ${{github.workspace}}/build-clang
+      working-directory: ${{github.workspace}}/build
       shell: bash
       run: ctest -C $BUILD_TYPE -D ExperimentalMemCheck
