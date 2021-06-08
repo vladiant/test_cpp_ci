@@ -1,4 +1,4 @@
-name: Ubuntu Valgrind
+name: Ubuntu ExperimentalMemCheck
 
 on: [push]
 
@@ -12,6 +12,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
+    - name: Install Valgrind
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y valgrind
 
     - name: Create Build Environment     
       run: cmake -E make_directory ${{github.workspace}}/build

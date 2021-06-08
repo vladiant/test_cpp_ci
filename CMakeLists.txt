@@ -57,6 +57,10 @@ target_link_libraries(
 # Test of Library
 include(CTest)
 
+# make ExperimentalMemCheck
+# find_program( MEMORYCHECK_COMMAND valgrind )
+# set( MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full" )
+
 add_executable(
     TestSampleLib
     test/test_simple_calc.cpp
