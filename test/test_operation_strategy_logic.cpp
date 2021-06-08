@@ -38,9 +38,9 @@ TEST_CASE_METHOD(MockedOperationStrategyTest,
            .Using(second_stage_result, third_stage_result))
       .Return(operation_result);
 
-  OperationStrategy test_strategy_(mockWarper_.get());
+  OperationStrategy test_strategy(mockWarper_.get());
 
-  REQUIRE(test_strategy_(first_arg, second_arg) == operation_result);
+  REQUIRE(test_strategy(first_arg, second_arg) == operation_result);
 }
 
 }  // namespace vva
