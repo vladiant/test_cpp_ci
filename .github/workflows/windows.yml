@@ -35,7 +35,13 @@ jobs:
     #   shell: bash
     #   run: ctest -C $BUILD_TYPE
 
-    - name: Run Tests
+    # - name: Run Tests
+    #   working-directory: ${{github.workspace}}/build
+    #   shell: bash
+    #   run: $BUILD_TYPE/TestSampleLib.exe
+
+    - name: Memcheck Test
       working-directory: ${{github.workspace}}/build
       shell: bash
-      run: $BUILD_TYPE/TestSampleLib.exe
+      run: ctest -C $BUILD_TYPE -D ExperimentalMemCheck
+
