@@ -78,6 +78,13 @@ set_target_properties(
         CXX_EXTENSIONS NO
 )
 
+# Fix for the Windows build
+target_compile_definitions(
+    TestSampleLib
+    PRIVATE
+    -DNOMINMAX
+)
+
 target_include_directories(
     TestSampleLib
     PRIVATE
