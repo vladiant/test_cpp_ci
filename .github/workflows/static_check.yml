@@ -94,4 +94,12 @@ jobs:
     - name: Run Clang Tidy    
       shell: bash
       working-directory: ${{github.workspace}}/build
-      run: run-clang-tidy -checks='cppcoreguidelines-*,performance-*,readibility-*,modernize-*,misc-*,clang-analyzer-*'
+      run: |
+        run-clang-tidy -checks='cppcoreguidelines-*,performance-*,readibility-*,modernize-*,misc-*,clang-analyzer-*' \
+                       -export-fixes ${{github.workspace}}/clang-tidy-fixes.yaml
+
+    - name: Upload Clang Tidy Result
+      uses: actions/upload-artifact@v2
+      with:
+        name: clang_tidy_fixes
+        path: ${{github.workspace}}/clang-tidy-fixes.yaml
