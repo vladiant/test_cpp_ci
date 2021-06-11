@@ -1,6 +1,6 @@
 name: Windows CMake
 
-on: [push]
+on: push
 
 env:
   BUILD_TYPE: Release
