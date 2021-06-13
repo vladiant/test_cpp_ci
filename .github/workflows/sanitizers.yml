@@ -17,7 +17,7 @@ jobs:
       shell: bash
       working-directory: ${{github.workspace}}/build-clang-asan   
       run: |
-          cmake $GITHUB_WORKSPACE .. \
+          cmake .. \
                 -DCMAKE_C_COMPILER=/usr/bin/clang \
                 -DCMAKE_CXX_COMPILER=/usr/bin/clang++ \
                 -DCMAKE_CXX_FLAGS="-O1 -g -fsanitize=address -fno-omit-frame-pointer"
@@ -50,7 +50,7 @@ jobs:
       shell: bash
       working-directory: ${{github.workspace}}/build-clang-msan   
       run: |
-          cmake $GITHUB_WORKSPACE .. \
+          cmake .. \
                 -DCMAKE_C_COMPILER=/usr/bin/clang \
                 -DCMAKE_CXX_COMPILER=/usr/bin/clang++ \
                 -DCMAKE_CXX_FLAGS="-O1 -g -fsanitize=memory -fno-omit-frame-pointer"
@@ -83,7 +83,7 @@ jobs:
       shell: bash
       working-directory: ${{github.workspace}}/build-clang-tsan   
       run: |
-          cmake $GITHUB_WORKSPACE .. \
+          cmake .. \
                 -DCMAKE_C_COMPILER=/usr/bin/clang \
                 -DCMAKE_CXX_COMPILER=/usr/bin/clang++ \
                 -DCMAKE_CXX_FLAGS="-O1 -g -fsanitize=thread"
@@ -116,7 +116,7 @@ jobs:
       shell: bash
       working-directory: ${{github.workspace}}/build-clang-ubsan   
       run: |
-          cmake $GITHUB_WORKSPACE .. \
+          cmake .. \
                 -DCMAKE_C_COMPILER=/usr/bin/clang \
                 -DCMAKE_CXX_COMPILER=/usr/bin/clang++ \
                 -DCMAKE_CXX_FLAGS="-fsanitize=undefined"
