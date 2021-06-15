@@ -37,19 +37,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-  
-    - name: Download Compile Commands
-      uses: actions/download-artifact@v2
-      with:
-        name: compile_commands
-
-    - name: Create Build Folder     
-      run: cmake -E make_directory ${{github.workspace}}/build
-
-    - name: Download Build Folder
-      uses: actions/download-artifact@v2
-      with:
-        name: build_folder
 
     - name: Install Clang Tidy
       run: |
@@ -59,10 +46,10 @@ jobs:
 
     - name: Run Clang Tidy    
       shell: bash
-      working-directory: ${{github.workspace}}/build
+      working-directory: ${{github.workspace}}/lib
       run: |
         run-clang-tidy -checks='cppcoreguidelines-*,performance-*,readibility-*,modernize-*,misc-*,clang-analyzer-*' \
-                       -fix
+                       -fix ./
 
     - name: Commit changes
       uses: Endbug/add-and-commit@v7
