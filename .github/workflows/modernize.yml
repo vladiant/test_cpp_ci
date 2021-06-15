@@ -59,6 +59,10 @@ jobs:
         run-clang-tidy -checks='cppcoreguidelines-*,performance-*,readibility-*,modernize-*,misc-*,clang-analyzer-*' \
                        -fix 
 
+    - name: Remove build folder    
+      shell: bash
+      run: rm -rf ${{github.workspace}}/build
+
     - name: Commit changes
       uses: Endbug/add-and-commit@v7
       with:
