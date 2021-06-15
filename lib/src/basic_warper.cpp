@@ -4,20 +4,20 @@
 
 namespace vva {
 
-auto BasicOperationWarper::addition(const int16_t& a, const int16_t& b) -> int16_t {
+int16_t BasicOperationWarper::addition(const int16_t& a, const int16_t& b) {
   return add(a, b);
 }
 
-auto BasicOperationWarper::subtraction(const int16_t& a, const int16_t& b) -> int16_t {
+int16_t BasicOperationWarper::subtraction(const int16_t& a, const int16_t& b) {
   return subtract(a, b);
 }
 
-auto BasicOperationWarper::multiplication(const int16_t& a,
-                                             const int16_t& b) -> int16_t {
+int16_t BasicOperationWarper::multiplication(const int16_t& a,
+                                             const int16_t& b) {
   return multiply(a, b);
 }
 
-auto BasicOperationWarper::division(const int16_t& a, const int16_t& b) -> int16_t {
+int16_t BasicOperationWarper::division(const int16_t& a, const int16_t& b) {
   return divide(a, b);
 }
 

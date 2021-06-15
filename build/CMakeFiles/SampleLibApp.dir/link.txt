@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/SampleLibApp.dir/app/main.cpp.o -o SampleLibApp  libSampleLib.a 
