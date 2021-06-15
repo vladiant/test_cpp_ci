@@ -44,12 +44,17 @@ jobs:
         sudo apt-get install -y clang-tidy 
         sudo apt-get install -y clang-tools
 
+    - name: Configure CMake    
+      shell: bash
+      working-directory: ${{github.workspace}}/build      
+      run: cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+
     - name: Run Clang Tidy    
       shell: bash
-      working-directory: ${{github.workspace}}/lib
+      working-directory: ${{github.workspace}}/build
       run: |
         run-clang-tidy -checks='cppcoreguidelines-*,performance-*,readibility-*,modernize-*,misc-*,clang-analyzer-*' \
-                       -fix ./
+                       -fix 
 
     - name: Commit changes
       uses: Endbug/add-and-commit@v7
