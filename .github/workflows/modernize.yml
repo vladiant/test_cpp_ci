@@ -1,4 +1,4 @@
-name: Auto Format
+name: Manual Modernize
 
 on: workflow_dispatch
 
