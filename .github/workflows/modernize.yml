@@ -1,6 +1,6 @@
 name: Manual Modernize
 
-on: push
+on: workflow_dispatch
 
 jobs:
   autoformat:
