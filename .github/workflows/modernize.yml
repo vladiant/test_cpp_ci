@@ -1,6 +1,11 @@
 name: Manual Modernize
 
 on: workflow_dispatch
+    inputs:
+      scan:
+       description: 'Apply Clang Tidy Fixes'
+       required: true
+       default: ''
 
 jobs:
   autoformat:
