@@ -25,32 +25,32 @@ void checkValue(WarperType value) {
 
 namespace vva {
 
-auto CheckedOperationWarper::addition(
-    const OperandType& a, const OperandType& b) -> CheckedOperationWarper::OperandType {
+CheckedOperationWarper::OperandType CheckedOperationWarper::addition(
+    const OperandType& a, const OperandType& b) {
   const auto result = add<WarperType>(a, b);
   checkValue(result);
 
   return static_cast<OperandType>(result);
 }
 
-auto CheckedOperationWarper::subtraction(
-    const OperandType& a, const OperandType& b) -> CheckedOperationWarper::OperandType {
+CheckedOperationWarper::OperandType CheckedOperationWarper::subtraction(
+    const OperandType& a, const OperandType& b) {
   const auto result = subtract<WarperType>(a, b);
   checkValue(result);
 
   return static_cast<OperandType>(result);
 }
 
-auto CheckedOperationWarper::multiplication(
-    const OperandType& a, const OperandType& b) -> CheckedOperationWarper::OperandType {
+CheckedOperationWarper::OperandType CheckedOperationWarper::multiplication(
+    const OperandType& a, const OperandType& b) {
   const auto result = multiply<WarperType>(a, b);
   checkValue(result);
 
   return static_cast<OperandType>(result);
 }
 
-auto CheckedOperationWarper::division(
-    const OperandType& a, const OperandType& b) -> CheckedOperationWarper::OperandType {
+CheckedOperationWarper::OperandType CheckedOperationWarper::division(
+    const OperandType& a, const OperandType& b) {
   if (b == 0) {
     throw std::invalid_argument("Division by zero");
   }

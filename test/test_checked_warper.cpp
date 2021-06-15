@@ -3,25 +3,24 @@
 #include <cstdint>
 #include <limits>
 #include <stdexcept>
-#include <utility>
-
 
 namespace {
 constexpr auto kMaxValue = std::numeric_limits<int16_t>::max();
 constexpr auto kMinValue = std::numeric_limits<int16_t>::min();
 }  // namespace
 
-namespace Catch::Matchers {
+namespace Catch {
+namespace Matchers {
 class ExceptionWatcher : public MatcherBase<std::exception> {
  public:
-  ExceptionWatcher(std::string  expected_message)
-      : expected_message_(std::move(expected_message)) {}
+  ExceptionWatcher(std::string const& expected_message)
+      : expected_message_(expected_message) {}
 
-  auto match(std::exception const& e) const -> bool override {
+  bool match(std::exception const& e) const override {
     return e.what() == expected_message_;
   }
 
-  auto describe() const -> std::string override {
+  std::string describe() const override {
     return "compare the exception what() message with \"" + expected_message_ +
            "\".";
   }
@@ -30,10 +29,11 @@ class ExceptionWatcher : public MatcherBase<std::exception> {
   std::string expected_message_;
 };
 
-inline auto ExceptionMessage(std::string const& expeted_message) -> ExceptionWatcher {
+inline ExceptionWatcher ExceptionMessage(std::string const& expeted_message) {
   return ExceptionWatcher(expeted_message);
 }
 
+}  // namespace Matchers
 }  // namespace Catch
 
 namespace vva {

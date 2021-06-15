@@ -4,7 +4,7 @@ namespace vva {
 OperationStrategy::OperationStrategy(IOperationWarper& warper)
     : warper_(warper) {}
 
-auto OperationStrategy::operator()(const int16_t& a, const int16_t& b) -> int16_t {
+int16_t OperationStrategy::operator()(const int16_t& a, const int16_t& b) {
   const auto sum = warper_.addition(a, b);
 
   constexpr int16_t operands_count = 2;
