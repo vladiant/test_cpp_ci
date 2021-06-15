@@ -1,6 +1,7 @@
 name: Manual Modernize
 
-on: workflow_dispatch
+on:
+   workflow_dispatch:
     inputs:
       scan:
        description: 'Apply Clang Tidy Fixes'
