@@ -1,0 +1,72 @@
+name: Auto Format
+
+on: workflow_dispatch
+
+jobs:
+  run:
+    name: Format with clang-format
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+            sudo apt-get update
+            sudo apt-get install -y clang-format
+
+      - name: Execute formatter
+        run: |
+            export CPP_SRC_FILES=$(find ./lib -name "*.*" | grep -E "(\.cc$|\.cpp$|\.h$|\.hpp$)")
+            export CPP_SRC_FILES="$CPP_SRC_FILES $(find ./app -name "*.*" | grep -E "(\.cc$|\.cpp$|\.h$|\.hpp$)")"
+            export CPP_SRC_FILES="$CPP_SRC_FILES $(find ./test -name "*.*" | grep -E "(\.cc$|\.cpp$|\.h$|\.hpp$)")"
+            if [ -n "$CPP_SRC_FILES" ]; then clang-format --style=Google -i $CPP_SRC_FILES; fi;
+
+      - name: Commit changes
+        uses: Endbug/add-and-commit@v7
+        with:
+            default_author: github_actions
+            message: 'Auto Format'
+            add: '*.*'
+
+  clang-tidy:
+    name: Format with Clang Tidy
+    needs: configure
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+  
+    - name: Download Compile Commands
+      uses: actions/download-artifact@v2
+      with:
+        name: compile_commands
+
+    - name: Create Build Folder     
+      run: cmake -E make_directory ${{github.workspace}}/build
+
+    - name: Download Build Folder
+      uses: actions/download-artifact@v2
+      with:
+        name: build_folder
+
+    - name: Install Clang Tidy
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y clang-tidy 
+        sudo apt-get install -y clang-tools
+
+    - name: Run Clang Tidy    
+      shell: bash
+      working-directory: ${{github.workspace}}/build
+      run: |
+        run-clang-tidy -checks='cppcoreguidelines-*,performance-*,readibility-*,modernize-*,misc-*,clang-analyzer-*' \
+                       -fix
+
+      - name: Commit changes
+        uses: Endbug/add-and-commit@v7
+        with:
+            default_author: github_actions
+            message: 'Auto Clang Tidy Fix'
+            add: '*.*'
