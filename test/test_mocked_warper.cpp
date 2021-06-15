@@ -4,6 +4,8 @@
 #include <i_warper.hpp>
 #include <limits>
 #include <stdexcept>
+#include <utility>
+
 
 namespace {
 using fakeit::Mock;
@@ -13,24 +15,23 @@ constexpr auto kMaxValue = std::numeric_limits<int16_t>::max();
 constexpr auto kMinValue = std::numeric_limits<int16_t>::min();
 
 template <typename Func, typename... Args>
-int16_t CallMock(vva::IOperationWarper& warper, Func func, Args... args) {
+auto CallMock(vva::IOperationWarper& warper, Func func, Args... args) -> int16_t {
   return std::invoke(func, warper, args...);
 }
 
 }  // namespace
 
-namespace Catch {
-namespace Matchers {
+namespace Catch::Matchers {
 class ExceptionWatcher : public MatcherBase<std::exception> {
  public:
-  ExceptionWatcher(std::string const& expected_message)
-      : expected_message_(expected_message) {}
+  ExceptionWatcher(std::string  expected_message)
+      : expected_message_(std::move(expected_message)) {}
 
-  bool match(std::exception const& e) const override {
+  auto match(std::exception const& e) const -> bool override {
     return e.what() == expected_message_;
   }
 
-  std::string describe() const override {
+  auto describe() const -> std::string override {
     return "compare the exception what() message with \"" + expected_message_ +
            "\".";
   }
@@ -39,11 +40,10 @@ class ExceptionWatcher : public MatcherBase<std::exception> {
   std::string expected_message_;
 };
 
-ExceptionWatcher ExceptionMessage(std::string const& expeted_message) {
+auto ExceptionMessage(std::string const& expeted_message) -> ExceptionWatcher {
   return ExceptionWatcher(expeted_message);
 }
 
-}  // namespace Matchers
 }  // namespace Catch
 
 namespace vva {

@@ -11,7 +11,7 @@ using WarperType = int32_t;
 constexpr WarperType kMaxValue = std::numeric_limits<int16_t>::max();
 constexpr WarperType kMinValue = std::numeric_limits<int16_t>::min();
 
-WarperType clampValue(WarperType value) {
+auto clampValue(WarperType value) -> WarperType {
   if (value > kMaxValue) {
     return kMaxValue;
   }
@@ -27,32 +27,32 @@ WarperType clampValue(WarperType value) {
 
 namespace vva {
 
-ClampedOperationWarper::OperandType ClampedOperationWarper::addition(
-    const OperandType& a, const OperandType& b) {
+auto ClampedOperationWarper::addition(
+    const OperandType& a, const OperandType& b) -> ClampedOperationWarper::OperandType {
   const auto result = add<WarperType>(a, b);
 
   const auto clamped_result = clampValue(result);
   return static_cast<OperandType>(clamped_result);
 }
 
-ClampedOperationWarper::OperandType ClampedOperationWarper::subtraction(
-    const OperandType& a, const OperandType& b) {
+auto ClampedOperationWarper::subtraction(
+    const OperandType& a, const OperandType& b) -> ClampedOperationWarper::OperandType {
   const auto result = subtract<WarperType>(a, b);
 
   const auto clamped_result = clampValue(result);
   return static_cast<OperandType>(clamped_result);
 }
 
-ClampedOperationWarper::OperandType ClampedOperationWarper::multiplication(
-    const OperandType& a, const OperandType& b) {
+auto ClampedOperationWarper::multiplication(
+    const OperandType& a, const OperandType& b) -> ClampedOperationWarper::OperandType {
   const auto result = multiply<WarperType>(a, b);
 
   const auto clamped_result = clampValue(result);
   return static_cast<OperandType>(clamped_result);
 }
 
-ClampedOperationWarper::OperandType ClampedOperationWarper::division(
-    const OperandType& a, const OperandType& b) {
+auto ClampedOperationWarper::division(
+    const OperandType& a, const OperandType& b) -> ClampedOperationWarper::OperandType {
   if (b == 0) {
     throw std::invalid_argument("Division by zero");
   }
