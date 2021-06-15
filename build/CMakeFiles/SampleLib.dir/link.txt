@@ -1,0 +1,2 @@
+/usr/bin/ar qc libSampleLib.a CMakeFiles/SampleLib.dir/lib/src/basic_warper.cpp.o CMakeFiles/SampleLib.dir/lib/src/checked_warper.cpp.o CMakeFiles/SampleLib.dir/lib/src/clamped_warper.cpp.o CMakeFiles/SampleLib.dir/lib/src/operation_strategy.cpp.o
+/usr/bin/ranlib libSampleLib.a

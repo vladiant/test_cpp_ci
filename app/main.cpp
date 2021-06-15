@@ -5,7 +5,7 @@
 #include "clamped_warper.hpp"
 #include "simple_calc.hpp"
 
-int main() {
+auto main() -> int {
   const int a = 4;
   const int b = 2;
 
