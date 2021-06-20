@@ -1,0 +1,71 @@
+name: Manual Modernize
+
+on: workflow_dispatch
+
+jobs:
+  autoformat:
+    name: Format with clang-format
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+            sudo apt-get update
+            sudo apt-get install -y clang-format
+
+      - name: Execute formatter
+        run: |
+            export CPP_SRC_FILES=$(find ./lib -name "*.*" | grep -E "(\.cc$|\.cpp$|\.h$|\.hpp$)")
+            export CPP_SRC_FILES="$CPP_SRC_FILES $(find ./app -name "*.*" | grep -E "(\.cc$|\.cpp$|\.h$|\.hpp$)")"
+            export CPP_SRC_FILES="$CPP_SRC_FILES $(find ./test -name "*.*" | grep -E "(\.cc$|\.cpp$|\.h$|\.hpp$)")"
+            if [ -n "$CPP_SRC_FILES" ]; then clang-format --style=Google -i $CPP_SRC_FILES; fi;
+
+      - name: Commit changes
+        uses: Endbug/add-and-commit@v7
+        with:
+            default_author: github_actions
+            message: 'Auto Format'
+            add: '*.*'
+
+  clang-tidy:
+    name: Format with Clang Tidy
+    needs: autoformat
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install Clang Tidy
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y clang-tidy 
+        sudo apt-get install -y clang-tools
+
+    - name: Create Build Environment     
+      run: cmake -E make_directory ${{github.workspace}}/build
+
+    - name: Configure CMake    
+      shell: bash
+      working-directory: ${{github.workspace}}/build      
+      run: cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+
+    - name: Run Clang Tidy    
+      shell: bash
+      working-directory: ${{github.workspace}}/build
+      run: |
+        run-clang-tidy -checks='cppcoreguidelines-*,performance-*,readibility-*,modernize-*,misc-*,clang-analyzer-*' \
+                       -fix 
+
+    - name: Remove build folder    
+      shell: bash
+      run: rm -rf ${{github.workspace}}/build
+
+    - name: Commit changes
+      uses: Endbug/add-and-commit@v7
+      with:
+          default_author: github_actions
+          message: 'Auto Clang Tidy Fix'
+          add: '*.*'
