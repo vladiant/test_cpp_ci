@@ -1,4 +1,4 @@
-name: Windows CMake
+name: macOS CMake
 
 on: push
 
@@ -7,7 +7,7 @@ env:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: macOS-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -28,7 +28,7 @@ jobs:
     - name: Run
       working-directory: ${{github.workspace}}/build
       shell: bash
-      run: $BUILD_TYPE/SampleLibApp.exe
+      run: ./SampleLibApp
 
     - name: Test
       working-directory: ${{github.workspace}}/build
