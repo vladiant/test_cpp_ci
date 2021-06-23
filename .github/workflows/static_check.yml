@@ -74,11 +74,6 @@ jobs:
     - name: Create Build Folder     
       run: cmake -E make_directory ${{github.workspace}}/build
 
-    - name: Download Build Folder
-      uses: actions/download-artifact@v2
-      with:
-        name: build_folder
-
     - name: Install Clang Tidy
       run: |
         sudo apt-get update
