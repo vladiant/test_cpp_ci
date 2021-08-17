@@ -45,7 +45,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: clang_tidy_fixes
-        path: ${{github.workspace}}/CppProjectSample-1.0.0-Linux.deb
+        path: ${{github.workspace}}/build/CppProjectSample-1.0.0-Linux.deb
   
 
   build-clang:
