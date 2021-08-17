@@ -36,6 +36,18 @@ jobs:
       shell: bash
       run: ctest -C $BUILD_TYPE
 
+    - name: Build Deb Package
+      working-directory: ${{github.workspace}}/build
+      shell: bash
+      run: make package
+
+    - name: Upload Deb Package
+      uses: actions/upload-artifact@v2
+      with:
+        name: clang_tidy_fixes
+        path: ${{github.workspace}}/CppProjectSample-1.0.0-Linux.deb
+  
+
   build-clang:
     name: Build with Clang
     runs-on: ubuntu-latest
