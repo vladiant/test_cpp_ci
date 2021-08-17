@@ -54,14 +54,6 @@ target_link_libraries(
         SampleLib
 )
 
-# By default:
-# MemoryCheckCommand: /usr/bin/valgrind
-# Execute:
-# make ExperimentalMemCheck
-# Overwrite variables:
-# ctest --overwrite MemoryCheckCommandOptions="--trace-children=yes --leak-check=full --error-exitcode=100"
-find_program( MEMORYCHECK_COMMAND valgrind )
-set( MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full --error-exitcode=100" )
 
 # Test of Library
 include(CTest)
@@ -100,3 +92,13 @@ target_link_libraries(
 )
 
 add_test(NAME TestSampleLib COMMAND TestSampleLib)
+
+
+find_program(MEMORYCHECK_COMMAND valgrind)
+if(VALGRIND)
+    add_custom_target(valgrind
+        COMMAND "${VALGRIND}" --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes $<TARGET_FILE:TestSampleLib>)
+else()
+    add_custom_target(valgrind COMMENT "Valgrind not found")
+endif()
+
