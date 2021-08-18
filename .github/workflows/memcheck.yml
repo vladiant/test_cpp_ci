@@ -1,6 +1,6 @@
-name: Ubuntu ExperimentalMemCheck
+name: Ubuntu Standalone MemCheck
 
-on: [push]
+on: push
 
 env:
   BUILD_TYPE: Debug
@@ -34,7 +34,7 @@ jobs:
     - name: Memcheck Test
       working-directory: ${{github.workspace}}/build
       shell: bash
-      run: make valgrind
+      run: cmake --build . --target valgrind
 
     - name: Upload Memcheck Result
       uses: actions/upload-artifact@v2
