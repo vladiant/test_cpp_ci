@@ -1,6 +1,7 @@
 name: Ubuntu DEB package
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
