@@ -35,3 +35,9 @@ jobs:
       working-directory: ${{github.workspace}}/build
       shell: bash
       run: make valgrind
+
+    - name: Upload Memcheck Result
+      uses: actions/upload-artifact@v2
+      with:
+        name: memcheck
+        path: ${{github.workspace}}/memcheck.txt
