@@ -93,11 +93,11 @@ target_link_libraries(
 
 add_test(NAME TestSampleLib COMMAND TestSampleLib)
 
-
+# To be used with memcheck.yml
 find_program(MEMORYCHECK_COMMAND valgrind)
 if(VALGRIND)
     add_custom_target(valgrind
-        COMMAND "${VALGRIND}" --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes $<TARGET_FILE:TestSampleLib>)
+        COMMAND "${VALGRIND}" --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=40 --track-origins=yes --track-fds=yes --log-file=memcheck.txt $<TARGET_FILE:TestSampleLib>)
 else()
     add_custom_target(valgrind COMMENT "Valgrind not found")
 endif()
