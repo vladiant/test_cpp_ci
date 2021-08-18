@@ -3,7 +3,7 @@ name: Ubuntu DEB package
 on:
   push:
     branches:
-      - master
+      - main
 
 env:
   BUILD_TYPE: Release
