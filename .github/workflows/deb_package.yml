@@ -1,9 +1,6 @@
 name: Ubuntu DEB package
 
 on:
-  workflow_dispatch:
-    home:
-      required: false
   push:
     branches:
       - master
