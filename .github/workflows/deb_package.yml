@@ -1,6 +1,10 @@
 name: Ubuntu DEB package
 
-on: push
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
 
 env:
   BUILD_TYPE: Release

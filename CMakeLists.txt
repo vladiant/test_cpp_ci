@@ -116,9 +116,9 @@ install(
 set(CPACK_PACKAGE_VERSION_MAJOR "1")
 set(CPACK_PACKAGE_VERSION_MINOR "0")
 set(CPACK_PACKAGE_VERSION_PATCH "0")
+set(CPACK_PACKAGE_DESCRIPTION "Minimal C++ test example")
 set(CPACK_GENERATOR "DEB") # Debian package
 set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON) # autogenerate dependency information
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Code Author") # mandatory
-set(CPACK_PACKAGE_DESCRIPTION "Minimal C++ test example")
 
 include(CPack)
