@@ -40,4 +40,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: memcheck
-        path: ${{github.workspace}}/memcheck.txt
+        path: ${{github.workspace}}/build/memcheck.txt
