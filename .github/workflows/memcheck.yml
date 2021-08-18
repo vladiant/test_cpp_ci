@@ -1,6 +1,6 @@
 name: Ubuntu Standalone MemCheck
 
-on: push
+on: workflow_dispatch
 
 env:
   BUILD_TYPE: Debug
