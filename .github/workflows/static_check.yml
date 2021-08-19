@@ -66,6 +66,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        submodules: true
   
     - name: Download Compile Commands
       uses: actions/download-artifact@v2
