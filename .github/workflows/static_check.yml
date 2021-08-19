@@ -27,12 +27,6 @@ jobs:
         name: compile_commands
         path: ${{github.workspace}}/build/compile_commands.json
   
-    - name: Upload Build Folder
-      uses: actions/upload-artifact@v2
-      with:
-        name: build_folder
-        path: ${{github.workspace}}/build/
-
   cppcheck:
     name: CppCheck
     needs: configure
@@ -78,11 +72,6 @@ jobs:
 
     - name: Create Build Folder     
       run: cmake -E make_directory ${{github.workspace}}/build
-
-    - name: Download Build Folder
-      uses: actions/download-artifact@v2
-      with:
-        name: build_folder
 
     - name: Install Clang Tidy
       run: |
