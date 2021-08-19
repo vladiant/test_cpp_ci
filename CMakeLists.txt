@@ -54,7 +54,6 @@ target_link_libraries(
         SampleLib
 )
 
-
 # Test of Library
 include(CTest)
 
@@ -93,6 +92,7 @@ target_link_libraries(
 
 add_test(NAME TestSampleLib COMMAND TestSampleLib)
 
+
 # To be used with memcheck.yml
 find_program(VALGRIND valgrind)
 if(VALGRIND)
@@ -102,3 +102,23 @@ else()
     add_custom_target(valgrind COMMENT "Valgrind not found")
 endif()
 
+
+# Package generation
+install(
+    TARGETS
+       SampleLib
+       SampleLibApp
+       TestSampleLib
+    DESTINATION 
+       sample_lib
+)
+
+set(CPACK_PACKAGE_VERSION_MAJOR "1")
+set(CPACK_PACKAGE_VERSION_MINOR "0")
+set(CPACK_PACKAGE_VERSION_PATCH "0")
+set(CPACK_PACKAGE_DESCRIPTION "Minimal C++ test example")
+set(CPACK_GENERATOR "DEB") # Debian package
+set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON) # autogenerate dependency information
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Code Author") # mandatory
+
+include(CPack)
