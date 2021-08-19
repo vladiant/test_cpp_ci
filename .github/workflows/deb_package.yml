@@ -1,0 +1,42 @@
+name: Ubuntu DEB package
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    name: Prepare DEB Package
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Create Build Environment     
+      run: cmake -E make_directory ${{github.workspace}}/build
+
+    - name: Configure CMake    
+      shell: bash
+      working-directory: ${{github.workspace}}/build   
+      run: cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+
+    - name: Build
+      working-directory: ${{github.workspace}}/build
+      shell: bash
+      run: cmake --build . --config $BUILD_TYPE
+
+    - name: Build Deb Package
+      working-directory: ${{github.workspace}}/build
+      shell: bash
+      run: make package
+
+    - name: Upload Deb Package
+      uses: actions/upload-artifact@v2
+      with:
+        name: clang_tidy_fixes
+        path: ${{github.workspace}}/build/CppProjectSample-1.0.0-Linux.deb
