@@ -38,5 +38,5 @@ jobs:
     - name: Upload Deb Package
       uses: actions/upload-artifact@v2
       with:
-        name: clang_tidy_fixes
+        name: deb_package
         path: ${{github.workspace}}/build/CppProjectSample-1.0.0-Linux.deb
