@@ -26,7 +26,7 @@ jobs:
       with:
         name: compile_commands
         path: ${{github.workspace}}/build/compile_commands.json
-  
+
   cppcheck:
     name: CppCheck
     needs: configure
