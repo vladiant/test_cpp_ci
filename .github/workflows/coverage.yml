@@ -1,0 +1,42 @@
+name: Test Coverage
+
+on: push
+
+env:
+  BUILD_TYPE: Debug
+
+jobs:
+  build:
+    name: Report Test Coverage
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Create Build Environment     
+      run: cmake -E make_directory ${{github.workspace}}/build
+
+    - name: Configure CMake    
+      shell: bash
+      working-directory: ${{github.workspace}}/build   
+      run: cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+
+    - name: Build
+      working-directory: ${{github.workspace}}/build
+      shell: bash
+      run: cmake --build . --config $BUILD_TYPE
+
+    - name: Prepare coverage data
+      working-directory: ${{github.workspace}}/build
+      shell: bash
+      run: cmake --build . --target cov_data
+
+    - name: Report code coverage
+      uses: zgosalvez/github-actions-report-lcov@v1
+      with:
+        coverage-files: cov.info.cleaned
+        minimum-coverage: 70
+        artifact-name: code-coverage-report
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: ${{github.workspace}}/build
+
