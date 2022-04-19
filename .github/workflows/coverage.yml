@@ -16,6 +16,11 @@ jobs:
     - name: Create Build Environment     
       run: cmake -E make_directory ${{github.workspace}}/build
 
+    - name: Install Coverage Tools
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y lcov
+
     - name: Configure CMake    
       shell: bash
       working-directory: ${{github.workspace}}/build   
