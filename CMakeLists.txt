@@ -106,6 +106,57 @@ target_link_libraries(
 
 add_test(NAME TestSampleLib COMMAND TestSampleLib)
 
+# Test coverage
+find_program(GCOV gcov)
+if (NOT GCOV)
+    message(WARNING "program gcov not found")
+endif()
+
+find_program(LCOV lcov)
+if (NOT LCOV)
+    message(WARNING "program lcov not found")
+endif()
+
+find_program(GENHTML genhtml)
+if (NOT GENHTML)
+    message(WARNING "program genhtml not found")
+endif()
+
+if (LCOV AND GCOV AND GENHTML)
+
+    target_compile_options(
+        SampleLib
+        PRIVATE
+            -fprofile-arcs -ftest-coverage
+    )
+
+    target_link_libraries(
+        SampleLib
+        PRIVATE
+            --coverage
+    )
+
+    set(covname cov)
+
+    add_custom_target(cov
+        # Cleanup lcov
+		${LCOV} --directory . --zerocounters
+
+        # Run tests
+		COMMAND TestSampleLib
+
+        # Capturing lcov counters and generating report
+		COMMAND ${LCOV} --directory . --capture --output-file ${covname}.info
+		COMMAND ${LCOV} --remove ${covname}.info '${CMAKE_SOURCE_DIR}/lib/include/*' '${CMAKE_SOURCE_DIR}/test/*' '${CMAKE_SOURCE_DIR}/catch2/*' '${CMAKE_SOURCE_DIR}/fakeit/*' '/usr/*' --output-file ${covname}.info.cleaned
+		COMMAND ${GENHTML} -o ${covname} ${covname}.info.cleaned
+		COMMAND ${CMAKE_COMMAND} -E remove ${covname}.info ${covname}.info.cleaned
+
+		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+		COMMENT "Resetting code coverage counters to zero.\nProcessing code coverage counters and generating report."
+    )
+else()
+    message(WARNING "unable to add target `cov`: missing coverage tools")
+endif()
 
 # To be used with memcheck.yml
 find_program(VALGRIND valgrind)
