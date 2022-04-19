@@ -122,7 +122,7 @@ if (NOT GENHTML_PATH)
     message(WARNING "program genhtml not found")
 endif()
 
-if (LCOV_PATH AND GCOV_PATH AND GENHTML_PATH)
+if (LCOV_PATH AND GCOV_PATH)
 
     target_compile_options(
         SampleLib
@@ -138,24 +138,52 @@ if (LCOV_PATH AND GCOV_PATH AND GENHTML_PATH)
 
     set(covname cov)
 
-    add_custom_target(cov
+    add_custom_target(cov_data
         # Cleanup lcov
-		${LCOV_PATH} --directory . --zerocounters
+        ${LCOV_PATH} --directory . --zerocounters
 
         # Run tests
-		COMMAND TestSampleLib
+        COMMAND TestSampleLib
 
         # Capturing lcov counters and generating report
-		COMMAND ${LCOV_PATH} --directory . --capture --output-file ${covname}.info
-		COMMAND ${LCOV_PATH} --remove ${covname}.info '${CMAKE_SOURCE_DIR}/lib/include/*' '${CMAKE_SOURCE_DIR}/test/*' '${CMAKE_SOURCE_DIR}/catch2/*' '${CMAKE_SOURCE_DIR}/fakeit/*' '/usr/*' --output-file ${covname}.info.cleaned
-		COMMAND ${GENHTML_PATH} -o ${covname} ${covname}.info.cleaned
-		COMMAND ${CMAKE_COMMAND} -E remove ${covname}.info ${covname}.info.cleaned
-
-		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-		COMMENT "Resetting code coverage counters to zero.\nProcessing code coverage counters and generating report."
+        COMMAND ${LCOV_PATH} --directory . --capture --output-file ${covname}.info
+        COMMAND ${LCOV_PATH} --remove ${covname}.info
+                             '${CMAKE_SOURCE_DIR}/lib/include/*'
+                             '${CMAKE_SOURCE_DIR}/test/*'
+                             '${CMAKE_SOURCE_DIR}/catch2/*'
+                             '${CMAKE_SOURCE_DIR}/fakeit/*'
+                             '/usr/*'
+                             --output-file ${covname}.info.cleaned
     )
+
+    if (GENHTML_PATH)
+        add_custom_target(cov
+            # Cleanup lcov
+            ${LCOV_PATH} --directory . --zerocounters
+
+            # Run tests
+            COMMAND TestSampleLib
+
+            # Capturing lcov counters and generating report
+            COMMAND ${LCOV_PATH} --directory . --capture --output-file ${covname}.info
+            COMMAND ${LCOV_PATH} --remove ${covname}.info
+                                 '${CMAKE_SOURCE_DIR}/lib/include/*'
+                                 '${CMAKE_SOURCE_DIR}/test/*'
+                                 '${CMAKE_SOURCE_DIR}/catch2/*'
+                                 '${CMAKE_SOURCE_DIR}/fakeit/*'
+                                 '/usr/*'
+                                 --output-file ${covname}.info.cleaned
+            COMMAND ${GENHTML_PATH} -o ${covname} ${covname}.info.cleaned
+            COMMAND ${CMAKE_COMMAND} -E remove ${covname}.info ${covname}.info.cleaned
+
+            COMMENT "Resetting code coverage counters to zero.\nProcessing code coverage counters and generating report."
+        )
+    else()
+        message(WARNING "unable to generate coverage report: missing genhtml")
+    endif()
+
 else()
-    message(WARNING "unable to add target `cov`: missing coverage tools")
+    message(WARNING "unable to add coverage targets: missing coverage tools")
 endif()
 
 # To be used with memcheck.yml
