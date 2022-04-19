@@ -107,27 +107,27 @@ target_link_libraries(
 add_test(NAME TestSampleLib COMMAND TestSampleLib)
 
 # Test coverage
-find_program(GCOV gcov)
-if (NOT GCOV)
+find_program(GCOV_PATH gcov)
+if (NOT GCOV_PATH)
     message(WARNING "program gcov not found")
 endif()
 
-find_program(LCOV lcov)
-if (NOT LCOV)
+find_program(LCOV_PATH lcov)
+if (NOT LCOV_PATH)
     message(WARNING "program lcov not found")
 endif()
 
-find_program(GENHTML genhtml)
-if (NOT GENHTML)
+find_program(GENHTML_PATH genhtml)
+if (NOT GENHTML_PATH)
     message(WARNING "program genhtml not found")
 endif()
 
-if (LCOV AND GCOV AND GENHTML)
+if (LCOV_PATH AND GCOV_PATH AND GENHTML_PATH)
 
     target_compile_options(
         SampleLib
         PRIVATE
-            -fprofile-arcs -ftest-coverage
+            -g -O0 -fprofile-arcs -ftest-coverage
     )
 
     target_link_libraries(
@@ -140,15 +140,15 @@ if (LCOV AND GCOV AND GENHTML)
 
     add_custom_target(cov
         # Cleanup lcov
-		${LCOV} --directory . --zerocounters
+		${LCOV_PATH} --directory . --zerocounters
 
         # Run tests
 		COMMAND TestSampleLib
 
         # Capturing lcov counters and generating report
-		COMMAND ${LCOV} --directory . --capture --output-file ${covname}.info
-		COMMAND ${LCOV} --remove ${covname}.info '${CMAKE_SOURCE_DIR}/lib/include/*' '${CMAKE_SOURCE_DIR}/test/*' '${CMAKE_SOURCE_DIR}/catch2/*' '${CMAKE_SOURCE_DIR}/fakeit/*' '/usr/*' --output-file ${covname}.info.cleaned
-		COMMAND ${GENHTML} -o ${covname} ${covname}.info.cleaned
+		COMMAND ${LCOV_PATH} --directory . --capture --output-file ${covname}.info
+		COMMAND ${LCOV_PATH} --remove ${covname}.info '${CMAKE_SOURCE_DIR}/lib/include/*' '${CMAKE_SOURCE_DIR}/test/*' '${CMAKE_SOURCE_DIR}/catch2/*' '${CMAKE_SOURCE_DIR}/fakeit/*' '/usr/*' --output-file ${covname}.info.cleaned
+		COMMAND ${GENHTML_PATH} -o ${covname} ${covname}.info.cleaned
 		COMMAND ${CMAKE_COMMAND} -E remove ${covname}.info ${covname}.info.cleaned
 
 		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
