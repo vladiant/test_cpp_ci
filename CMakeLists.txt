@@ -136,7 +136,7 @@ if (LCOV_PATH AND GCOV_PATH)
             --coverage
     )
 
-    set(covname lcov)
+    set(covname cov)
 
     add_custom_target(cov_data
         # Cleanup lcov
@@ -146,7 +146,7 @@ if (LCOV_PATH AND GCOV_PATH)
         COMMAND TestSampleLib
 
         # Capturing lcov counters and generating report
-        COMMAND ${LCOV_PATH} --directory . --capture --output-file ${covname}.info
+        COMMAND ${LCOV_PATH} --directory . --capture --initial --output-file ${covname}.info
         COMMAND ${LCOV_PATH} --remove ${covname}.info
                              '${CMAKE_SOURCE_DIR}/lib/include/*'
                              '${CMAKE_SOURCE_DIR}/test/*'

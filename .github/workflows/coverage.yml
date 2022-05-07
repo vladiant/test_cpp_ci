@@ -36,30 +36,12 @@ jobs:
       shell: bash
       run: cmake --build . --target cov_data
 
-    - name: Upload Coverage Info
-      uses: actions/upload-artifact@v2
-      with:
-        name: lcov_info
-        path: ${{github.workspace}}/build/lcov.info.cleaned
-
-  coverage:
-    name: ReportCoverage
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Download  Coverage Info
-      uses: actions/download-artifact@v2
-      with:
-        name: lcov_info
-
     - name: Report code coverage
       uses: zgosalvez/github-actions-report-lcov@v1
       with:
-        coverage-files: lcov.info.cleaned
+        coverage-files: build/cov.info.cleaned
         minimum-coverage: 70
         artifact-name: code-coverage-report
         github-token: ${{ secrets.GITHUB_TOKEN }}
         working-directory: ${{github.workspace}}
+
