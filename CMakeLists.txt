@@ -136,7 +136,7 @@ if (LCOV_PATH AND GCOV_PATH)
             --coverage
     )
 
-    set(covname cov)
+    set(covname lcov)
 
     add_custom_target(cov_data
         # Cleanup lcov
