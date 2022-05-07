@@ -38,6 +38,6 @@ jobs:
       with:
         coverage-files: build/cov.info.cleaned
         minimum-coverage: 70
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+        artifact-name: code-coverage-report
         working-directory: ${{github.workspace}}
 
