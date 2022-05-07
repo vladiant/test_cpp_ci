@@ -43,5 +43,9 @@ jobs:
         minimum-coverage: 70
         artifact-name: code-coverage-report
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        working-directory: .
+        working-directory: ${{github.workspace}}
 
+    - name: Test
+      working-directory: ${{github.workspace}}/build
+      shell: bash
+      run: ctest -C $BUILD_TYPE
