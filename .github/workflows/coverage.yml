@@ -2,9 +2,6 @@ name: Test Coverage
 
 on: push
 
-env:
-  BUILD_TYPE: Debug
-
 jobs:
   build:
     name: Report Test Coverage
@@ -24,12 +21,12 @@ jobs:
     - name: Configure CMake    
       shell: bash
       working-directory: ${{github.workspace}}/build   
-      run: cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+      run: cmake ..
 
     - name: Build
       working-directory: ${{github.workspace}}/build
       shell: bash
-      run: cmake --build . --config $BUILD_TYPE
+      run: cmake --build .
 
     - name: Prepare coverage data
       working-directory: ${{github.workspace}}/build
