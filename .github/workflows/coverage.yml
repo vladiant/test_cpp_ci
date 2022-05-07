@@ -31,10 +31,10 @@ jobs:
     - name: Prepare coverage data
       working-directory: ${{github.workspace}}/build
       shell: bash
-      run: cmake --build . --target cov_data
+      run: cmake --build . --target cov
 
     - name: Report code coverage
-      uses: zgosalvez/github-actions-report-lcov@v1.4.0
+      uses: zgosalvez/github-actions-report-lcov@v1
       with:
         coverage-files: build/cov.info.cleaned
         minimum-coverage: 70

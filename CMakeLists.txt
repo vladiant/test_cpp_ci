@@ -174,7 +174,7 @@ if (LCOV_PATH AND GCOV_PATH)
                                  '/usr/*'
                                  --output-file ${covname}.info.cleaned
             COMMAND ${GENHTML_PATH} -o ${covname} ${covname}.info.cleaned
-            COMMAND ${CMAKE_COMMAND} -E remove ${covname}.info ${covname}.info.cleaned
+            # COMMAND ${CMAKE_COMMAND} -E remove ${covname}.info ${covname}.info.cleaned
 
             COMMENT "Resetting code coverage counters to zero.\nProcessing code coverage counters and generating report."
         )
