@@ -154,9 +154,6 @@ if (LCOV_PATH AND GCOV_PATH)
                              '${CMAKE_SOURCE_DIR}/fakeit/*'
                              '/usr/*'
                              --output-file ${covname}.info.cleaned
-        COMMAND ${LCOV_PATH} --add-tracefile ${covname}.info.cleaned
-                             --add-tracefile ${covname}.info 
-                             --output-file ${covname}.info.cleaned
     )
 
     if (GENHTML_PATH)
