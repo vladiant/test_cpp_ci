@@ -27,7 +27,7 @@ jobs:
       run: cmake --build . --config $BUILD_TYPE
 
     - name: Upload Tests Executable
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: test_executable
         path: ${{github.workspace}}/build/TestSampleLib
@@ -57,7 +57,7 @@ jobs:
       run: valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --log-file=${{github.workspace}}/valgrind-memcheck.txt ${{github.workspace}}/TestSampleLib
       
     - name: Upload Valgrind Memcheck Result
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: valgrind_memcheck
         path: ${{github.workspace}}/valgrind-memcheck.txt
@@ -87,7 +87,7 @@ jobs:
       run: valgrind --tool=helgrind --log-file=${{github.workspace}}/valgrind-helgrind.txt ${{github.workspace}}/TestSampleLib
       
     - name: Upload Valgrind Helgrind Result
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: valgrind_helgrind
         path: ${{github.workspace}}/valgrind-helgrind.txt
