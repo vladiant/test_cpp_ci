@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Create Build Environment     
       run: cmake -E make_directory ${{github.workspace}}/build
@@ -36,7 +36,7 @@ jobs:
       run: make package
 
     - name: Upload Deb Package
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: deb_package
         path: ${{github.workspace}}/build/CppProjectSample-1.0.0-Linux.deb

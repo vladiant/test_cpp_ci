@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Create Build Environment     
       run: cmake -E make_directory ${{github.workspace}}/build
@@ -22,7 +22,7 @@ jobs:
       run: cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
     - name: Upload Compile Commands
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: compile_commands
         path: ${{github.workspace}}/build/compile_commands.json
@@ -33,8 +33,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
     - name: Download Compile Commands
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: compile_commands
 
@@ -43,17 +46,17 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y cppcheck
 
-    - name: Run CppCheck    
+    - name: Run CppCheck
       shell: bash   
       # File test/test_simple_calc.cpp is ignored
       run: |
           cppcheck --project=${{github.workspace}}/compile_commands.json \
-                   --error-exitcode=1 --std=c++17 \
+                   --std=c++17 \
                    --output-file=${{github.workspace}}/cppcheck-report.txt \
                    --suppress=preprocessorErrorDirective:${{github.workspace}}/catch2/catch.hpp .
 
     - name: Upload CppCheck Result
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: cppcheck_report
         path: ${{github.workspace}}/cppcheck-report.txt
@@ -64,7 +67,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
   
     - name: Download Compile Commands
       uses: actions/download-artifact@v2
@@ -88,7 +91,7 @@ jobs:
                        -export-fixes ${{github.workspace}}/clang-tidy-fixes.yaml
 
     - name: Upload Clang Tidy Result
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: clang_tidy_fixes
         path: ${{github.workspace}}/clang-tidy-fixes.yaml
