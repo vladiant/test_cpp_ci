@@ -24,7 +24,7 @@ jobs:
             if [ -n "$CPP_SRC_FILES" ]; then clang-format --style=Google -i $CPP_SRC_FILES; fi;
 
       - name: Commit changes
-        uses: Endbug/add-and-commit@v7
+        uses: Endbug/add-and-commit@v9
         with:
             default_author: github_actions
             message: 'Auto Format'
@@ -64,7 +64,7 @@ jobs:
       run: rm -rf ${{github.workspace}}/build
 
     - name: Commit changes
-      uses: Endbug/add-and-commit@v7
+      uses: Endbug/add-and-commit@v9
       with:
           default_author: github_actions
           message: 'Auto Clang Tidy Fix'

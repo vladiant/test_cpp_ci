@@ -21,11 +21,12 @@ jobs:
       run: cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE
 
     - name: Run MSVC Code Analysis
-      uses: microsoft/msvc-code-analysis-action@502db28262ba134c9a621d5a509b9f7e696c99b6
+      uses: microsoft/msvc-code-analysis-action@v0.1.1
       # Provide a unique ID to access the sarif output path
       id: run-analysis
       with:
-        cmakeBuildDirectory: ${{github.workspace}}/build
+        cmakeBuildDirectory: ${{github.workspace}}/build      
+        buildConfiguration: Release
         # Ruleset file that will determine what checks will be run
         ruleset: NativeRecommendedRules.ruleset
         # Paths to ignore analysis of CMake targets and includes
