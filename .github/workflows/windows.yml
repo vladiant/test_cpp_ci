@@ -22,6 +22,7 @@ jobs:
 
     - name: Run MSVC Code Analysis
       uses: microsoft/msvc-code-analysis-action@v0.1.1
+      buildConfiguration: Release
       # Provide a unique ID to access the sarif output path
       id: run-analysis
       with:
