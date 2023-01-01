@@ -13,6 +13,9 @@ name: CodeQL
 
 on: push
 
+env:
+  BUILD_TYPE: Release
+
 jobs:
   analyze:
     name: Analyze
