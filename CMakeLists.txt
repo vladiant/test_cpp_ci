@@ -96,6 +96,7 @@ target_include_directories(
     TestSampleLib
     PRIVATE
         .
+        test
 )
 
 target_link_libraries(
@@ -153,6 +154,7 @@ if (LCOV_PATH AND GCOV_PATH)
                              '${CMAKE_SOURCE_DIR}/catch2/*'
                              '${CMAKE_SOURCE_DIR}/fakeit/*'
                              '/usr/*'
+                             --ignore-errors unused
                              --output-file ${covname}.info.cleaned
     )
 
@@ -172,6 +174,7 @@ if (LCOV_PATH AND GCOV_PATH)
                                  '${CMAKE_SOURCE_DIR}/catch2/*'
                                  '${CMAKE_SOURCE_DIR}/fakeit/*'
                                  '/usr/*'
+                                 --ignore-errors unused
                                  --output-file ${covname}.info.cleaned
             COMMAND ${GENHTML_PATH} -o ${covname} ${covname}.info.cleaned
             COMMAND ${CMAKE_COMMAND} -E remove ${covname}.info ${covname}.info.cleaned
