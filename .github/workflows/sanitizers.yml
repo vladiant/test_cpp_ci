@@ -67,6 +67,13 @@ jobs:
     - name: Test
       working-directory: ${{github.workspace}}/build-clang-msan
       shell: bash
+      env:
+        # intercept_memcmp=0: std::ctype<char>::_M_widen_init() inside
+        # uninstrumented libstdc++.so calls memcmp on its own table; the MSan
+        # runtime memcmp interceptor flags that as use-of-uninitialized-value.
+        # This is a false positive: the table is genuinely initialised by
+        # libstdc++ before memcmp is called.
+        MSAN_OPTIONS: "intercept_memcmp=0"
       run: ctest -VV --progress
 
   build-thread-sanitizer:

@@ -16,8 +16,10 @@ src:*/catch2/catch.hpp
 # uninstrumented libstdc++ virtual call) against a std::string.  The entire
 # exception object is created by uninstrumented libstdc++ exception machinery
 # so even the virtual dispatch itself reads memory with no MSan shadow.
-# Suppress the whole helper file; it contains no production logic.
+# The src: rule covers the non-inlined case; the fun: rule covers cases where
+# the optimiser inlines match() into a Catch2 MatchExpr instantiation.
 src:*/test/exception_matcher.hpp
+fun:*ExceptionWatcher*
 
 # When Catch2 copies Catch::StringRef/std::string data (sourced from
 # uninstrumented libstdc++ allocations), the actual "uninitialized" read is
