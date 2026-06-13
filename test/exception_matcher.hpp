@@ -9,7 +9,13 @@ class ExceptionWatcher : public MatcherBase<std::exception> {
   ExceptionWatcher(std::string const& expected_message)
       : expected_message_(expected_message) {}
 
-  bool match(std::exception const& e) const override {
+  // noinline + no_sanitize("memory"): e.what() returns a const char* backed by
+  // uninstrumented libstdc++ memory, causing MSan false positives when strlen
+  // scans it.  Preventing inlining keeps this frame visible so the MSan
+  // ignorelist entry can fire; no_sanitize("memory") disables MSan within the
+  // function body itself.
+  __attribute__((noinline, no_sanitize("memory"))) bool match(
+      std::exception const& e) const override {
     return e.what() == expected_message_;
   }
 
