@@ -1,0 +1,32 @@
+# MSan ignorelist: suppress false positives from uninstrumented libstdc++.
+# std::_Rb_tree (red-black tree) uses comparison on memory that libstdc++
+# leaves "logically uninitialized" but MSan flags as uninitialized reads.
+# This triggers inside Catch2's static ReporterRegistrar initialisation.
+fun:*_Rb_tree*
+
+# Catch2 (catch.hpp) is a header-only library compiled into the test binary.
+# It makes heavy use of std::string, std::map and other libstdc++ types whose
+# backing memory is allocated by uninstrumented libstdc++, producing a long
+# tail of false-positive "use-of-uninitialized-value" reports from various
+# Catch2 internal functions (ReporterRegistrar, ConsoleReporter, etc.).
+# Suppress all warnings that originate from within the catch.hpp header.
+src:*/catch2/catch.hpp
+
+# exception_matcher.hpp compares e.what() (a const char* returned by an
+# uninstrumented libstdc++ virtual call) against a std::string.  The entire
+# exception object is created by uninstrumented libstdc++ exception machinery
+# so even the virtual dispatch itself reads memory with no MSan shadow.
+# The src: rule covers the non-inlined case; the fun: rule covers cases where
+# the optimiser inlines match() into a Catch2 MatchExpr instantiation.
+src:*/test/exception_matcher.hpp
+fun:*ExceptionWatcher*
+
+# When Catch2 copies Catch::StringRef/std::string data (sourced from
+# uninstrumented libstdc++ allocations), the actual "uninitialized" read is
+# reported in the STL template instantiations below, even though the memory is
+# genuinely initialised.  These are all compiled inline into the test binary
+# but their shadow was never updated by the uninstrumented libstdc++ code that
+# wrote the data.
+src:*/bits/char_traits.h
+src:*/bits/basic_string.h
+src:*/bits/basic_string.tcc
