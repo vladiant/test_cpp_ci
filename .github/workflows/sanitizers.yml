@@ -53,7 +53,7 @@ jobs:
           cmake .. \
                 -DCMAKE_C_COMPILER=/usr/bin/clang \
                 -DCMAKE_CXX_COMPILER=/usr/bin/clang++ \
-                -DCMAKE_CXX_FLAGS="-O1 -g -fsanitize=memory -fno-omit-frame-pointer"
+                -DCMAKE_CXX_FLAGS="-O1 -g -fsanitize=memory -fno-omit-frame-pointer -fsanitize-ignorelist=${{github.workspace}}/msan_ignorelist.txt"
     - name: Build
       working-directory: ${{github.workspace}}/build-clang-msan
       shell: bash

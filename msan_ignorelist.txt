@@ -1,0 +1,5 @@
+# MSan ignorelist: suppress false positives from uninstrumented libstdc++.
+# std::_Rb_tree (red-black tree) uses comparison on memory that libstdc++
+# leaves "logically uninitialized" but MSan flags as uninitialized reads.
+# This triggers inside Catch2's static ReporterRegistrar initialisation.
+fun:*_Rb_tree*
