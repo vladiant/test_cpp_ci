@@ -4,37 +4,12 @@
 #include <limits>
 #include <stdexcept>
 
+#include "exception_matcher.hpp"
+
 namespace {
 constexpr auto kMaxValue = std::numeric_limits<int16_t>::max();
 constexpr auto kMinValue = std::numeric_limits<int16_t>::min();
 }  // namespace
-
-namespace Catch {
-namespace Matchers {
-class ExceptionWatcher : public MatcherBase<std::exception> {
- public:
-  ExceptionWatcher(std::string const& expected_message)
-      : expected_message_(expected_message) {}
-
-  bool match(std::exception const& e) const override {
-    return e.what() == expected_message_;
-  }
-
-  std::string describe() const override {
-    return "compare the exception what() message with \"" + expected_message_ +
-           "\".";
-  }
-
- private:
-  std::string expected_message_;
-};
-
-inline ExceptionWatcher ExceptionMessage(std::string const& expeted_message) {
-  return ExceptionWatcher(expeted_message);
-}
-
-}  // namespace Matchers
-}  // namespace Catch
 
 namespace vva {
 class CheckedWarperTest {
