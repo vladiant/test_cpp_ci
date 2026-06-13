@@ -9,9 +9,9 @@
 // __msan_unpoison_string uses an internal strlen that bypasses the interceptor,
 // gets the length, and marks the bytes as initialized before operator== runs.
 #if defined(__has_feature)
-#  if __has_feature(memory_sanitizer)
-#    include <sanitizer/msan_interface.h>
-#  endif
+#if __has_feature(memory_sanitizer)
+#include <sanitizer/msan_interface.h>
+#endif
 #endif
 
 namespace Catch {
@@ -24,9 +24,9 @@ class ExceptionWatcher : public MatcherBase<std::exception> {
   bool match(std::exception const& e) const override {
     const char* what_msg = e.what();
 #if defined(__has_feature)
-#  if __has_feature(memory_sanitizer)
+#if __has_feature(memory_sanitizer)
     __msan_unpoison_string(what_msg);
-#  endif
+#endif
 #endif
     return what_msg == expected_message_;
   }
