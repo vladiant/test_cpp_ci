@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v6
 
     - name: Create Build Environment     
       run: cmake -E make_directory ${{github.workspace}}/build
@@ -34,10 +34,10 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v6
 
     - name: Download Compile Commands
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: compile_commands
 
@@ -67,10 +67,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v6
   
     - name: Download Compile Commands
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: compile_commands
 
