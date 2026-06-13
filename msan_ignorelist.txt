@@ -12,6 +12,13 @@ fun:*_Rb_tree*
 # Suppress all warnings that originate from within the catch.hpp header.
 src:*/catch2/catch.hpp
 
+# exception_matcher.hpp compares e.what() (a const char* returned by an
+# uninstrumented libstdc++ virtual call) against a std::string.  The entire
+# exception object is created by uninstrumented libstdc++ exception machinery
+# so even the virtual dispatch itself reads memory with no MSan shadow.
+# Suppress the whole helper file; it contains no production logic.
+src:*/test/exception_matcher.hpp
+
 # When Catch2 copies Catch::StringRef/std::string data (sourced from
 # uninstrumented libstdc++ allocations), the actual "uninitialized" read is
 # reported in the STL template instantiations below, even though the memory is
