@@ -4,8 +4,10 @@
 # This triggers inside Catch2's static ReporterRegistrar initialisation.
 fun:*_Rb_tree*
 
-# std::runtime_error (and its subclasses like std::overflow_error) stores the
-# what() message inside uninstrumented libstdc++.  Reading the returned
-# const char* in ExceptionWatcher::match is therefore flagged as
-# use-of-uninitialized-value even though the memory is genuinely initialised.
-fun:*ExceptionWatcher*match*
+# Catch2 (catch.hpp) is a header-only library compiled into the test binary.
+# It makes heavy use of std::string, std::map and other libstdc++ types whose
+# backing memory is allocated by uninstrumented libstdc++, producing a long
+# tail of false-positive "use-of-uninitialized-value" reports from various
+# Catch2 internal functions (ReporterRegistrar, ConsoleReporter, etc.).
+# Suppress all warnings that originate from within the catch.hpp header.
+src:*/catch2/catch.hpp
