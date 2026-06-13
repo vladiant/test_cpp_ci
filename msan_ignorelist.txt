@@ -11,3 +11,13 @@ fun:*_Rb_tree*
 # Catch2 internal functions (ReporterRegistrar, ConsoleReporter, etc.).
 # Suppress all warnings that originate from within the catch.hpp header.
 src:*/catch2/catch.hpp
+
+# When Catch2 copies Catch::StringRef/std::string data (sourced from
+# uninstrumented libstdc++ allocations), the actual "uninitialized" read is
+# reported in the STL template instantiations below, even though the memory is
+# genuinely initialised.  These are all compiled inline into the test binary
+# but their shadow was never updated by the uninstrumented libstdc++ code that
+# wrote the data.
+src:*/bits/char_traits.h
+src:*/bits/basic_string.h
+src:*/bits/basic_string.tcc
