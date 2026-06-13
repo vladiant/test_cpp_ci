@@ -7,16 +7,11 @@
 
 namespace vva {
 
-TEST_CASE("GeneralOperationStrategy", "[operation-strategy-logic]") {
-  BasicOperationWarper basic_warper;
-  CheckedOperationWarper checked_warper;
-  ClampedOperationWarper clamped_warper;
-
-  IOperationWarper* i =
-      GENERATE_REF(&basic_warper, &checked_warper, &clamped_warper);
-
-  REQUIRE(nullptr != i);
-  OperationStrategy test_strategy(*i);
+TEMPLATE_TEST_CASE("GeneralOperationStrategy", "[operation-strategy-logic]",
+                   BasicOperationWarper, CheckedOperationWarper,
+                   ClampedOperationWarper) {
+  TestType warper;
+  OperationStrategy test_strategy(warper);
 
   REQUIRE(test_strategy(6, 2) == 4);
 }
