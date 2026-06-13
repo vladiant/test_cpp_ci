@@ -96,6 +96,7 @@ target_include_directories(
     TestSampleLib
     PRIVATE
         .
+        test
 )
 
 target_link_libraries(
