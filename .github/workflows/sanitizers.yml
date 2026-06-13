@@ -53,7 +53,7 @@ jobs:
           cmake .. \
                 -DCMAKE_C_COMPILER=/usr/bin/clang \
                 -DCMAKE_CXX_COMPILER=/usr/bin/clang++ \
-                -DCMAKE_CXX_FLAGS="-O1 -g -fsanitize=memory -fno-omit-frame-pointer"
+                -DCMAKE_CXX_FLAGS="-O1 -g -fsanitize=memory -fno-omit-frame-pointer -fsanitize-ignorelist=${{github.workspace}}/msan_ignorelist.txt"
     - name: Build
       working-directory: ${{github.workspace}}/build-clang-msan
       shell: bash
@@ -64,10 +64,17 @@ jobs:
       shell: bash
       run: ./SampleLibApp
 
-#    - name: Test
-#      working-directory: ${{github.workspace}}/build-clang-msan
-#      shell: bash
-#      run: ctest -VV --progress
+    - name: Test
+      working-directory: ${{github.workspace}}/build-clang-msan
+      shell: bash
+      env:
+        # intercept_memcmp=0: std::ctype<char>::_M_widen_init() inside
+        # uninstrumented libstdc++.so calls memcmp on its own table; the MSan
+        # runtime memcmp interceptor flags that as use-of-uninitialized-value.
+        # This is a false positive: the table is genuinely initialised by
+        # libstdc++ before memcmp is called.
+        MSAN_OPTIONS: "intercept_memcmp=0"
+      run: ctest -VV --progress
 
   build-thread-sanitizer:
     name: Thread Sanitizer
