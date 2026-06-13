@@ -3,3 +3,9 @@
 # leaves "logically uninitialized" but MSan flags as uninitialized reads.
 # This triggers inside Catch2's static ReporterRegistrar initialisation.
 fun:*_Rb_tree*
+
+# std::runtime_error (and its subclasses like std::overflow_error) stores the
+# what() message inside uninstrumented libstdc++.  Reading the returned
+# const char* in ExceptionWatcher::match is therefore flagged as
+# use-of-uninitialized-value even though the memory is genuinely initialised.
+fun:*ExceptionWatcher*match*
