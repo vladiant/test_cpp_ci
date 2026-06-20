@@ -2,6 +2,10 @@ name: Windows CMake
 
 on: [push, workflow_dispatch]
 
+permissions:
+  security-events: write
+  contents: read
+
 env:
   BUILD_TYPE: Release
 
