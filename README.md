@@ -60,5 +60,5 @@ In short: clang-tidy is best for code-quality and static-analysis warnings, sani
 
 ### FakeIt
 * https://github.com/eranpeer/FakeIt
-* commit 1576b26efca0a91361ff1974062c6da25ca944f6
-* 2.0.7
+* commit f9a654eb174b478e600901309e1c62e5779294d7
+* 2.5.0
