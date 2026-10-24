@@ -4,7 +4,7 @@
 [![Valgrind](https://github.com/vladiant/test_cpp_ci/actions/workflows/valgrind.yml/badge.svg)](https://github.com/vladiant/test_cpp_ci/actions/workflows/valgrind.yml)
 [![CppCheck](https://github.com/vladiant/test_cpp_ci/actions/workflows/static_check.yml/badge.svg)](https://github.com/vladiant/test_cpp_ci/actions/workflows/static_check.yml)
 [![Clang Tidy](https://github.com/vladiant/test_cpp_ci/actions/workflows/static_check.yml/badge.svg)](https://github.com/vladiant/test_cpp_ci/actions/workflows/static_check.yml)
-[![Coverage](https://github.com/vladiant/test_cpp_ci/actions/workflows/coverage.yml/badge.svg)](https://github.com/vladiant/test_cpp_ci/actions/workflows/coverage.yml)
+[![Coverage 70%](https://img.shields.io/badge/coverage-70%25-brightgreen)](https://github.com/vladiant/test_cpp_ci/actions/workflows/coverage.yml)
 
 Test C++ CI project
 
