@@ -1,4 +1,11 @@
 # test_cpp_ci
+
+[![Clang Sanitizers](https://github.com/vladiant/test_cpp_ci/actions/workflows/sanitizers.yml/badge.svg)](https://github.com/vladiant/test_cpp_ci/actions/workflows/sanitizers.yml)
+[![Valgrind](https://github.com/vladiant/test_cpp_ci/actions/workflows/valgrind.yml/badge.svg)](https://github.com/vladiant/test_cpp_ci/actions/workflows/valgrind.yml)
+[![CppCheck](https://github.com/vladiant/test_cpp_ci/actions/workflows/static_check.yml/badge.svg)](https://github.com/vladiant/test_cpp_ci/actions/workflows/static_check.yml)
+[![Clang Tidy](https://github.com/vladiant/test_cpp_ci/actions/workflows/static_check.yml/badge.svg)](https://github.com/vladiant/test_cpp_ci/actions/workflows/static_check.yml)
+[![Coverage](https://github.com/vladiant/test_cpp_ci/actions/workflows/coverage.yml/badge.svg)](https://github.com/vladiant/test_cpp_ci/actions/workflows/coverage.yml)
+
 Test C++ CI project
 
 ## Test frameworks
