@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.10)
 
 project(CppProjectSample LANGUAGES CXX)
 
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 # Library
 add_library(
     SampleLib
@@ -20,7 +24,7 @@ add_library(
 set_target_properties(
     SampleLib
     PROPERTIES
-        CXX_STANDARD 17
+        CXX_STANDARD 20
         CXX_STANDARD_REQUIRED YES
         CXX_EXTENSIONS NO
         LINKER_LANGUAGE CXX
@@ -50,7 +54,7 @@ add_executable(
 set_target_properties(
     SampleLibApp
     PROPERTIES
-        CXX_STANDARD 17
+        CXX_STANDARD 20
         CXX_STANDARD_REQUIRED YES
         CXX_EXTENSIONS NO
 )
@@ -87,7 +91,7 @@ add_executable(
 set_target_properties(
     TestSampleLib
     PROPERTIES
-        CXX_STANDARD 17
+        CXX_STANDARD 20
         CXX_STANDARD_REQUIRED YES
         CXX_EXTENSIONS NO
 )
