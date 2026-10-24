@@ -19,6 +19,18 @@ This project now targets C++20 as its baseline language standard, with C++23 ava
 
 To build with C++23 on a compatible compiler, pass `-DCMAKE_CXX_STANDARD=23` during configuration.
 
+## Quick start
+
+Use the bundled CMake preset for the standard CI flow:
+
+```bash
+cmake --preset ci
+cmake --build --preset ci
+ctest --preset ci
+```
+
+This keeps the local and CI configuration aligned with a single, reproducible build entry point.
+
 ## Use this template
 
 To create a new project based on this repository:
