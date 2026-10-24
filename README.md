@@ -8,6 +8,17 @@
 
 Test C++ CI project
 
+## C++ standard modernization
+
+This project now targets C++20 as its baseline language standard, with C++23 available on toolchains that support it. The move from C++17 is intentional:
+
+- C++20 brings concepts, ranges, coroutines, and improved standard library support that reduce boilerplate and make modern C++ code clearer and safer.
+- The language and library features added in C++20 are now widely available in current GCC, Clang, and MSVC toolchains, so the project can stay modern without sacrificing portability.
+- C++23 continues the evolution of the standard and is useful for newer compilers, but C++20 is the safer default for CI because it remains broadly supported across Linux, macOS, and Windows.
+- Keeping the project at C++20 also avoids unnecessary churn from compiler-specific workarounds while still enabling a future upgrade to C++23 when the toolchain baseline is updated.
+
+To build with C++23 on a compatible compiler, pass `-DCMAKE_CXX_STANDARD=23` during configuration.
+
 ## Use this template
 
 To create a new project based on this repository:

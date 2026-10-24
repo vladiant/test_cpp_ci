@@ -51,7 +51,7 @@ jobs:
       # File test/test_simple_calc.cpp is ignored
       run: |
           cppcheck --project=${{github.workspace}}/compile_commands.json \
-                   --std=c++17 \
+                   --std=c++20 \
                    --output-file=${{github.workspace}}/cppcheck-report.txt \
                    --suppress=preprocessorErrorDirective:${{github.workspace}}/catch2/catch.hpp
 
