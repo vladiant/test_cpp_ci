@@ -51,6 +51,69 @@ To create a new project based on this repository:
 
 In short: clang-tidy is best for code-quality and static-analysis warnings, sanitizers catch runtime failures during execution, CppCheck adds another static-analysis layer, and Valgrind is especially valuable for detecting memory errors and leak patterns that only show up at runtime.
 
+## Bugs this would have caught
+
+These intentionally broken PRs are the kinds of mistakes the CI is designed to catch before a branch is merged. Each one is realistic, small, and easy to miss in a normal local build.
+
+### 1. Use-after-free: "Simplify shutdown path"
+
+```cpp
+std::string* buffer = new std::string("payload");
+delete buffer;
+std::cout << buffer->size() << '\n';
+```
+
+A normal debug build can appear to work; ASan fails immediately because the pointer is dereferenced after free.
+
+### 2. Data race: "Parallelize histogram build"
+
+```cpp
+int hits = 0;
+std::thread t1([&]() { for (int i = 0; i < 1'000'000; ++i) ++hits; });
+std::thread t2([&]() { for (int i = 0; i < 1'000'000; ++i) ++hits; });
+t1.join();
+t2.join();
+```
+
+This is not safe without a lock or atomic. ThreadSanitizer catches the race during the test run and points at the unsynchronized access.
+
+### 3. Leak: "Cache parser state"
+
+```cpp
+struct ParserState {
+    explicit ParserState(std::string s) : path(std::move(s)) {}
+    std::string path;
+};
+
+void parse_file(const std::string& path) {
+    auto* state = new ParserState(path);
+    state->path += ".tmp";
+}
+```
+
+The code appears correct until a long-running process leaks memory repeatedly. The Valgrind CI job flags the leaked allocation (and LSan can also catch this in sanitizer runs).
+
+### 4. Integer overflow: "Optimize packet length check"
+
+```cpp
+int len = std::numeric_limits<int>::max();
+len += 1; // signed overflow UB
+```
+
+This is a classic overflow bug. With UBSan enabled, the CI catches the invalid arithmetic at runtime.
+
+### 5. Undefined behavior: "Inline fast path"
+
+```cpp
+int x = 1;
+int y = 32;
+int value = x << y; // shift count too large for 32-bit int
+```
+
+This is undefined behavior in C++. UBSan reports the invalid shift during test execution.
+
+These examples are intentionally bad, but they reflect the same class of issues that the repository's sanitizer, static-analysis, and valgrind jobs are specifically meant to catch.
+
 ## Test frameworks
 
 ### Catch2
